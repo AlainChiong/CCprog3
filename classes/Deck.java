@@ -1,4 +1,4 @@
-package CCprog3.classes;
+package classes;
 
 public class Deck {
     
