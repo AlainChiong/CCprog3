@@ -5,3 +5,4 @@ public class Card {
     private String rarity; 
     private String variant; 
     private double value;
+}
