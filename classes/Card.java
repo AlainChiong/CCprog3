@@ -29,46 +29,90 @@ public class Card {
     //Ret
     public static Card createCard(Scanner scanner) {
         String name;
-        String rarity;
-        String variant;
+        String rarity = "";
+        String variant = "";
         double value;
+        int rarityInput=0;
+        int variantInput=0;
+        boolean validInput = false;
 
-        int rarityInput;
-
+        System.out.print("Name of card: ");
         name = scanner.nextLine();
 
-        try {
+        System.out.print("Value of card($): ");
+        value = scanner.nextDouble();
+        scanner.nextLine();
 
-            System.out.println("1 - Common");
-            System.out.println("2 - Uncommon");
-            System.out.println("3 - Rare");
-            System.out.println("4 - Legendary");
-            rarityInput = scanner.nextInt();
-        } catch (InputMismatchException e) {
-            // TODO: handle exception
+        while (!validInput) {
+            try {
+                System.out.println("1 - Common");
+                System.out.println("2 - Uncommon");
+                System.out.println("3 - Rare");
+                System.out.println("4 - Legendary");
+
+                System.out.print("Choose a rarity (1-4): ");
+                rarityInput = scanner.nextInt();
+
+                if (rarityInput >= 1 && rarityInput <= 4) {
+                    validInput = true;
+                } else {
+                    System.out.println("Please enter a number between 1 and 4.\n");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a whole number.\n");
+                scanner.nextLine(); 
+            }
         }
-
         switch (rarityInput) {
-            case 1:
+            case 1: 
+                rarity = "Common";
                 break;
-            case 2:
+            case 2: 
+                rarity = "Uncommon";
                 break;
-            case 3:
+            case 3: 
+                rarity = "Rare";
                 break;
-            case 4:
+            case 4: 
+                rarity = "Legendary";
                 break;
-        
             default:
                 break;
         }
-
         if (rarityInput == 3 || rarityInput == 4) {
-            
-        }
+            System.out.println("1 - Normal");
+            System.out.println("2 - Extended-art");
+            System.out.println("3 - Full-art");
+            System.out.println("4 - Alt-art");
+            System.out.print("Choose a variant (1-4): ");
+            variantInput = scanner.nextInt();
 
+            switch (variantInput) {
+                case 1: 
+                    variant = "Normal";
+                    break;
+                case 2:
+                    variant = "Extended-art";
+                    value = value * 1.5;
+                    break;
+                case 3:
+                    variant = "Full-art";
+                    value = value * 2;
+                    break;
+                case 4:
+                    variant = "Alt-art";
+                    value = value * 3;
+                    break;
+                default:
+                break;
+            }
+        }
         return new Card(name, rarity, variant, value);
     }
 
+    public boolean matches(Card other) {
+    return this.name.equalsIgnoreCase(other.name) && this.rarity.equalsIgnoreCase(other.rarity) && this.variant.equalsIgnoreCase(other.variant);
+    }
 
     //Setters and Getters For Name
     public void setName(String name) {

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import classes.*;
@@ -6,34 +7,56 @@ public class Main {
     public static void main(String args[]) {
         Scanner scanner = new Scanner(System.in);
         Collection collection = new Collection();
-
+        ArrayList<Binder> binders = new ArrayList<>();
+        ArrayList<Deck> decks = new ArrayList<>();
         boolean running = true;
 
         while (running) {
-            System.out.println("Welcome to the Trading Card Inventory System!");
+            System.out.println("\n=== Trading Card Inventory System ===");
             System.out.println("1 - Add Card");
             System.out.println("2 - Increase/Decrease Card Count");
-            System.out.println("3 - Create a new binder");
-            System.out.println("4 - Create a new deck");
+            System.out.println("3 - Manage Binders");
+            System.out.println("4 - Manage Decks");
+            System.out.println("5 - Display Collection");
+            System.out.println("6 - View Card Details");
+            System.out.println("7 - Exit");
 
+            System.out.print("Enter choice: ");
             String input = scanner.next();
             char choice = input.charAt(0);
+            scanner.nextLine();
 
             switch (choice) {
                 case '1':
+                    Card newCard = Card.createCard(scanner);
+                    collection.addCard(newCard);
                     break;
                 case '2':
-                    if (collection.getCardCount() > 0) {
-                        
-                    }
+                    collection.modifyCardCount(scanner);
                     break;
                 case '3':
+                    Binder.manageBinders(scanner, binders, collection);
                     break;
                 case '4':
+                    Deck.manageDecks(scanner, decks, collection);
+                    break;
+                case '5':
+                    collection.displayCollection();
+                    break;
+                case '6':
+                    System.out.print("Enter card name to view: ");
+                    String search = scanner.nextLine();
+                    collection.viewCardDetails(search);
+                    break;
+                case '7':
+                    running = false;
+                    System.out.println("Goodbye!");
                     break;
                 default:
-                    break;
+                    System.out.println("Invalid input.");
             }
         }
+        scanner.close();
     }
+    
 }
