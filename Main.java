@@ -44,6 +44,7 @@ public class Main {
                     collection.displayCollection();
                     break;
                 case '6':
+                    collection.displayCollection();
                     System.out.print("Enter card name to view: ");
                     String search = scanner.nextLine();
                     collection.viewCardDetails(search);
