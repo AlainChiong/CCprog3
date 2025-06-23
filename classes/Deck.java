@@ -75,10 +75,10 @@ public class Deck {
         while (true) {
             System.out.println("\n=== Deck Menu ===");
             System.out.println("1 - Create New Deck");
-            System.out.println("2 - View Decks");
-            System.out.println("3 - Add Card to Deck");
-            System.out.println("4 - Remove Card from Deck");
-            System.out.println("5 - View Card Details");
+            System.out.println("2 - Delete Deck");
+            System.out.println("3 - View Decks");
+            System.out.println("4 - Add Card to Deck");
+            System.out.println("5 - Remove Card from Deck");
             System.out.println("6 - Go Back");
             System.out.print("Enter choice: ");
 
@@ -94,6 +94,17 @@ public class Deck {
                     System.out.println("Deck created.");
                     break;
                 case '2':
+                    System.out.print("Enter deck name to delete: ");
+                    String dDeck = scanner.nextLine();
+                    Deck tDelete = findDeck(decks, dDeck);
+                    if (tDelete != null) {
+                        decks.remove(tDelete);
+                        System.out.println("Deck \"" + dDeck + "\" deleted.");
+                    } else {
+                        System.out.println("Deck not found.");
+                    }
+                    break;
+                case '3':
                     if (decks.isEmpty()) {
                         System.out.println("No decks yet.");
                         break;
@@ -103,7 +114,7 @@ public class Deck {
                         d.viewDeck();
                     }
                     break;
-                case '3':
+                case '4':
                     System.out.print("Enter deck name: ");
                     String targetDeck = scanner.nextLine();
                     Deck deck = findDeck(decks, targetDeck);
@@ -123,7 +134,7 @@ public class Deck {
                         System.out.println("Card not found or no copies left.");
                     }
                     break;
-                case '4':
+                case '5':
                     System.out.print("Enter deck name: ");
                     String dName = scanner.nextLine();
                     Deck d = findDeck(decks, dName);
@@ -140,18 +151,6 @@ public class Deck {
                             dummy.setAmount(dummy.getAmount() + 1);
                         }
                     }
-                    break;
-                case '5':
-                    System.out.print("Enter deck name: ");
-                    String deckToView = scanner.nextLine();
-                    Deck target = findDeck(decks, deckToView);
-                    if (target == null) {
-                        System.out.println("Deck not found.");
-                        break;
-                    }
-                    System.out.print("Enter card name to view: ");
-                    String cname = scanner.nextLine();
-                    target.viewCardDetails(cname);
                     break;
                 case '6':
                     return;

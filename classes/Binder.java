@@ -108,18 +108,19 @@ public class Binder {
 
         this.cards.add(theirCard);
         otherBinder.cards.add(myCard);
-        System.out.println("Successfully traded " + cardToTrade.getName() + " to " + otherBinder.getName() + ".");
+        System.out.println("Successfully traded " + myCard.getName() + " to " + theirCard.getName() + ".");
     }
 
     public static void manageBinders(Scanner scanner, ArrayList<Binder> binders, Collection collection) {
         while (true) {
             System.out.println("\n=== Binder Menu ===");
             System.out.println("1 - Create New Binder");
-            System.out.println("2 - View Binders");
-            System.out.println("3 - Add Card to Binder");
-            System.out.println("4 - Remove Card from Binder");
-            System.out.println("5 - Trade Cards Between Binders");
-            System.out.println("6 - Go Back");
+            System.out.println("2 - Delete Binder");
+            System.out.println("3 - View Binders");
+            System.out.println("4 - Add Card to Binder");
+            System.out.println("5 - Remove Card from Binder");
+            System.out.println("6 - Trade Cards Between Binders");
+            System.out.println("7 - Go Back");
             System.out.print("Enter choice: ");
 
             String input = scanner.nextLine();
@@ -134,6 +135,17 @@ public class Binder {
                     System.out.println("Binder created.");
                     break;
                 case '2':
+                    System.out.print("Enter binder name to delete: ");
+                    String dBinder = scanner.nextLine();
+                    Binder tDelete = findBinder(binders, dBinder);
+                    if (tDelete != null) {
+                        binders.remove(tDelete);
+                        System.out.println("Binder \"" + dBinder + "\" deleted.");
+                    } else {
+                        System.out.println("Binder not found.");
+                    }
+                    break;
+                case '3':
                     if (binders.isEmpty()) {
                         System.out.println("No binders yet.");
                         break;
@@ -143,7 +155,7 @@ public class Binder {
                         b.viewBinder();
                     }
                     break;
-                case '3':
+                case '4':
                     if (binders.isEmpty()) {
                         System.out.println("No binders yet.");
                         break;
@@ -166,7 +178,7 @@ public class Binder {
                         System.out.println("Card not found or no copies left.");
                     }
                     break;
-                case '4':
+                case '5':
                     System.out.print("Enter binder name: ");
                     String bName = scanner.nextLine();
                     Binder b = findBinder(binders, bName);
@@ -184,7 +196,7 @@ public class Binder {
                         }
                     }
                     break;
-                case '5':
+                case '6':
                     if (binders.size() < 2) {
                         System.out.println("Need at least 2 binders to trade.");
                         break;
@@ -210,7 +222,7 @@ public class Binder {
 
                     fBinder.tradeWith(tBinder, scanner);
                     break;
-                case '6':
+                case '7':
                     return;
                 default:
                     System.out.println("Invalid input.");
