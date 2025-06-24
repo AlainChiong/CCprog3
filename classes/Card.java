@@ -3,6 +3,9 @@ package classes;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import enums.Rarity;
+import enums.Variant;
+
 /**
  * The `Card` class represents a collectible card with attributes such as name, rarity,
  * variant, value, and the amount/quantity of the card.
@@ -19,18 +22,18 @@ public class Card {
     /**
      * The rarity of the card (Common, Uncommon, Rare, Legendary).
      */
-    private String rarity;
+    private Rarity rarity;
 
     /**
      * The variant of the card (e.g., Normal, Extended-art, Full-art, Alt-art).
      */
-    private String variant;
+    private Variant variant;
 
     /**
      * The monetary value of a single card. This value can be adjusted based on the variant.
      */
     private double value;
-    
+
     /**
      * The quantity or amount of this specific card. Differs on each collection, binder, and deck
      * Defaults to 1 when a new card is created.
@@ -46,7 +49,7 @@ public class Card {
      * @param variant The variant of the card.
      * @param value   The monetary value of the card.
      */
-    public Card(String name, String rarity, String variant, double value) {
+    public Card(String name, Rarity rarity, Variant variant, double value) {
         this.name = name;
         this.rarity = rarity;
         this.variant = variant;
@@ -66,8 +69,8 @@ public class Card {
      */
     public static Card createCard(Scanner scanner) {
         String name;
-        String rarity = "";
-        String variant = "";
+        Rarity rarity = null;
+        Variant variant = null;
         double value;
         int rarityInput=0;
         int variantInput=0;
@@ -81,16 +84,16 @@ public class Card {
         scanner.nextLine();
 
         while (!validInput) {
-            try {
-                System.out.println("1 - Common");
-                System.out.println("2 - Uncommon");
-                System.out.println("3 - Rare");
-                System.out.println("4 - Legendary");
+            System.out.println("1 - Common");
+            System.out.println("2 - Uncommon");
+            System.out.println("3 - Rare");
+            System.out.println("4 - Legendary");
 
-                System.out.print("Choose a rarity (1-4): ");
+            try {
+                System.out.print("Choose the rarity(1-4) of this card: ");
                 rarityInput = scanner.nextInt();
 
-                if (rarityInput >= 1 && rarityInput <= 4) {
+                if ((rarity = Rarity.fromInt(rarityInput)) != null) {
                     validInput = true;
                 } else {
                     System.out.println("Please enter a number between 1 and 4.\n");
@@ -100,48 +103,32 @@ public class Card {
                 scanner.nextLine(); 
             }
         }
-        switch (rarityInput) {
-            case 1: 
-                rarity = "Common";
-                break;
-            case 2: 
-                rarity = "Uncommon";
-                break;
-            case 3: 
-                rarity = "Rare";
-                break;
-            case 4: 
-                rarity = "Legendary";
-                break;
-            default:
-                break;
-        }
-        if (rarityInput == 3 || rarityInput == 4) {
-            System.out.println("1 - Normal");
-            System.out.println("2 - Extended-art");
-            System.out.println("3 - Full-art");
-            System.out.println("4 - Alt-art");
-            System.out.print("Choose a variant (1-4): ");
-            variantInput = scanner.nextInt();
 
-            switch (variantInput) {
-                case 1: 
-                    variant = "Normal";
-                    break;
-                case 2:
-                    variant = "Extended-art";
-                    value = value * 1.5;
-                    break;
-                case 3:
-                    variant = "Full-art";
-                    value = value * 2;
-                    break;
-                case 4:
-                    variant = "Alt-art";
-                    value = value * 3;
-                    break;
-                default:
-                break;
+        validInput = false;
+
+        if (rarityInput == 3 || rarityInput == 4) {
+
+            while (!validInput) {
+                System.out.println("This card is a " + rarity.toString() + " card and qualifies for a variant.");
+                System.out.println("1 - Normal");
+                System.out.println("2 - Extended-art");
+                System.out.println("3 - Full-art");
+                System.out.println("4 - Alt-art");
+
+                try {
+                    System.out.print("Choose a variant (1-4): ");
+                    variantInput = scanner.nextInt();
+
+                    if ((variant = Variant.fromInt(variantInput)) != null) {
+                        validInput = true;
+                    } else {
+                        System.out.println("Please enter a number between 1 and 4.\n");
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("Invalid input! Please enter a whole number.\n");
+                    scanner.nextLine(); 
+                }
             }
         }
         return new Card(name, rarity, variant, value);
@@ -156,7 +143,7 @@ public class Card {
      * `false` otherwise.
      */
     public boolean matches(Card other) {
-    return this.name.equalsIgnoreCase(other.name) && this.rarity.equalsIgnoreCase(other.rarity) && this.variant.equalsIgnoreCase(other.variant);
+    return this.name.equalsIgnoreCase(other.name) && this.rarity.toString().equalsIgnoreCase(other.rarity.toString()) && this.variant.toString().equalsIgnoreCase(other.variant.toString());
     }
 
     /**
@@ -182,7 +169,7 @@ public class Card {
      *
      * @param rarity The new rarity for the card (e.g., "Common","Uncommon","Rare","Legendary").
      */
-    public void setRarity(String rarity) {
+    public void setRarity(Rarity rarity) {
         this.rarity = rarity;
     }
 
@@ -191,7 +178,7 @@ public class Card {
      *
      * @return The current rarity of the card.
      */
-    public String getRarity() {
+    public Rarity getRarity() {
         return this.rarity;
     }
 
@@ -200,7 +187,7 @@ public class Card {
      *
      * @param variant The new variant for the card ("Normal","Extended-art","Full-art","Alt-art").
      */
-    public void setVariant(String variant) {
+    public void setVariant(Variant variant) {
         this.variant = variant;
     }
 
@@ -209,7 +196,7 @@ public class Card {
      *
      * @return The current variant of the card.
      */
-    public String getVariant() {
+    public Variant getVariant() {
         return this.variant;
     }
 

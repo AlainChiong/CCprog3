@@ -44,4 +44,26 @@ public enum Rarity {
                 return null;
         }
     }
+
+    /**
+     * Returns a user-friendly string representation of the rarity level.
+     * This method overrides the default `Object.toString()` method.
+     *
+     * @return The name of the rarity constant as a String.
+     */
+    @Override
+    public String toString() {
+        switch (this) {
+            case COMMON:
+                return "Common";
+            case UNCOMMON:
+                return "Uncommon";
+            case RARE:
+                return "Rare";
+            case LEGENDARY:
+                return "Legendary";
+            default:
+                return super.toString(); 
+        }
+    }
 }

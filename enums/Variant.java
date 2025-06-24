@@ -67,4 +67,26 @@ public enum Variant {
                 return null;
         }
     }
+
+    /**
+     * Returns a user-friendly string representation of the variant level.
+     * This method overrides the default `Object.toString()` method.
+     *
+     * @return The name of the rarity constant as a String.
+     */
+    @Override
+    public String toString() {
+        switch (this) {
+            case NORMAL:
+                return "Normal";
+            case EXTENDED_ART:
+                return "Extended Art";
+            case FULL_ART:
+                return "Full Art";
+            case ALT_ART:
+                return "Alt Art";
+            default:
+                return super.toString(); 
+        }
+    }
 }
