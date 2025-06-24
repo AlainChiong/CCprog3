@@ -8,9 +8,10 @@ import enums.Variant;
 
 /**
  * The `Card` class represents a collectible card with attributes such as name, rarity,
- * variant, value, and the amount/quantity of the card.
+ * variant, monetary value, and the amount/quantity of the card.
  * It provides methods for creating new cards interactively and for managing
- * card properties.
+ * card properties. The value of the card is influenced by its variant, which is
+ * defined by the {@link Variant} enum.
  */
 public class Card {
 
@@ -20,23 +21,26 @@ public class Card {
     private String name;
 
     /**
-     * The rarity of the card (Common, Uncommon, Rare, Legendary).
+     * The rarity of the card (e.g., Common, Uncommon, Rare, Legendary),
+     * represented by the {@link Rarity} enum.
      */
     private Rarity rarity;
 
     /**
-     * The variant of the card (e.g., Normal, Extended-art, Full-art, Alt-art).
+     * The variant of the card (e.g., Normal, Extended-art, Full-art, Alt-art),
+     * represented by the {@link Variant} enum. This attribute influences the card's final monetary value.
      */
     private Variant variant;
 
     /**
-     * The monetary value of a single card. This value can be adjusted based on the variant.
+     * The monetary base value of a single card. This value is before any
+     * variant-specific multipliers are applied by {@link #getValue()}.
      */
     private double value;
 
     /**
-     * The quantity or amount of this specific card. Differs on each collection, binder, and deck
-     * Defaults to 1 when a new card is created.
+     * The quantity or amount of this specific card. This amount can differ across
+     * collections, binders, and decks. Defaults to 1 when a new card is created.
      */
     private double amount;
 
@@ -45,9 +49,10 @@ public class Card {
      * The amount of the card is initialized to 1 by default.
      *
      * @param name    The name of the card.
-     * @param rarity  The rarity of the card.
-     * @param variant The variant of the card.
-     * @param value   The monetary value of the card.
+     * @param rarity  The {@link Rarity} of the card.
+     * @param variant The {@link Variant} of the card.
+     * @param value   The monetary base value of the card. The final value will be
+     * calculated using this base value and the variant's multiplier.
      */
     public Card(String name, Rarity rarity, Variant variant, double value) {
         this.name = name;
@@ -57,15 +62,18 @@ public class Card {
         this.amount = 1;
     }
 
-    /**
+     /**
      * Interactively creates a new `Card` object by prompting the user for input
      * via the provided `Scanner` object.
-     * The method guides the user through selecting rarity and, if applicable, variant,
-     * which can affect the card's final value. It handles invalid input for numeric selections.
+     * The method guides the user through entering the card's name and base value,
+     * then selecting its rarity. If the rarity is {@link Rarity#RARE} or {@link Rarity#LEGENDARY},
+     * the user is prompted to choose a variant. The chosen {@link Variant}'s multiplier
+     * is then applied to the card's base value, affecting the value returned by {@link #getValue()}.
+     * It handles invalid input for numeric selections.
      *
      * @param scanner The `Scanner` object used to read user input from the console.
-     * @return A newly created `Card` object based on user input.
-     * @throws InputMismatchException if the user enters non-integer input for rarity or variant selection.
+     * @return A newly created `Card` object based on user input. The card's final value
+     * will be calculated based on the base value and selected variant.
      */
     public static Card createCard(Scanner scanner) {
         String name;
@@ -201,21 +209,32 @@ public class Card {
     }
 
     /**
-     * Sets the monetary value of the card.
+     * Sets the monetary base value of the card.
+     * This value does not include any multipliers from the card's variant.
      *
-     * @param value The new monetary value for the card.
+     * @param value The new monetary base value for the card.
      */
     public void setValue(double value) {
         this.value = value;
     }
 
     /**
-     * Returns the monetary value of the card.
+     * Returns the monetary value of the card
      *
      * @return The current monetary value of the card.
      */
-    public double getValue() {
+    public double getBaseValue() {
         return this.value;
+    }
+
+    /**
+     * Returns the monetary value of the card, calculated by applying the
+     * {@link Variant}'s multiplier to the card's base value.
+     *
+     * @return The current monetary value of the card, including variant multiplier.
+     */
+    public double getValue() {
+        return this.value * variant.getMultiplier();
     }
 
     /**
