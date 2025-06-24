@@ -5,24 +5,61 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
 
+
+/**
+ * The `Binder` class represents a physical or digital binder used to store a collection of {@link Card} objects.
+ * A binder has a name and a fixed capacity (maximum of 20 cards). Unlike a {@link Deck}, a binder
+ * does not enforce uniqueness of card names; multiple copies of the same card (by name) can be added,
+ * but only up to the maximum capacity. It also provides functionality for trading cards with other binders.
+ */
 public class Binder {
+
+   /**
+     * The name of the binder.
+     */
     private String name;
+
+    /**
+     * An `ArrayList` to store the {@link Card} objects contained within this binder.
+     */
     private ArrayList<Card> cards;
 
-
+    /**
+     * Constructs a new `Binder` with a specified name and initializes an empty list of cards.
+     *
+     * @param name The name of the binder.
+     */
     public Binder(String name) {
         this.name = name;
         this.cards = new ArrayList<>();
     }
 
+    /**
+     * Returns the name of the binder.
+     *
+     * @return The current name of the binder.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the `ArrayList` containing all {@link Card} objects in this binder.
+     *
+     * @return An `ArrayList` of cards currently in the binder.
+     */
     public ArrayList<Card> getCards() {
         return cards;
     }
 
+    /**
+     * Attempts to add a {@link Card} to the binder.
+     * A card can only be added if the binder is not already full (max 20 cards).
+     * This method allows for duplicate card names, unlike a {@link Deck}.
+     *
+     * @param card The `Card` object to be added.
+     * @return `true` if the card was successfully added, `false` otherwise (binder is full).
+     */
     public boolean addCard(Card card) {
         if (cards.size() >= 20) {
             System.out.println("Binder is full (max 20 cards).");
@@ -33,6 +70,13 @@ public class Binder {
         return true;
     }
 
+    /**
+     * Attempts to remove a {@link Card} from the binder by its name.
+     * The first card found with a matching name (case-insensitive) will be removed.
+     *
+     * @param name The name of the card to be removed.
+     * @return `true` if the card was found and removed, `false` if the card was not found in the binder.
+     */
     public boolean removeCard(String name) {
         for (int i = 0; i < cards.size(); i++) {
             if (cards.get(i).getName().equalsIgnoreCase(name)) {
@@ -45,6 +89,12 @@ public class Binder {
         return false;
     }
 
+    /**
+     * Displays all cards currently in this binder to the console.
+     * Cards are sorted alphabetically by name for consistent display.
+     * Includes the card's name, rarity, variant, and value.
+     * If the binder is empty, a corresponding message is printed.
+     */
     public void viewBinder() {
         if (cards.isEmpty()) {
             System.out.println("Binder is empty.");
@@ -58,6 +108,16 @@ public class Binder {
         }
     }
 
+    /**
+     * Facilitates a trade of one card from this binder with one card from another binder.
+     * The method prompts the user to select a card from the current binder to give away
+     * and then a card from the `otherBinder` to receive.
+     * Both binders must contain the selected cards, and the `otherBinder` must not be full
+     * to receive a card. Cards are exchanged if the trade is valid.
+     *
+     * @param otherBinder The `Binder` object to trade cards with.
+     * @param scanner     The `Scanner` object used to read user input for card selection.
+     */
     public void tradeWith(Binder otherBinder, Scanner scanner) {
         if (this == otherBinder) {
             System.out.println("You cannot trade with the same binder.");
@@ -111,6 +171,17 @@ public class Binder {
         System.out.println("Successfully traded " + myCard.getName() + " to " + theirCard.getName() + ".");
     }
 
+    /**
+     * Provides a static menu-driven interface for managing a list of `Binder` objects.
+     * This method allows users to create, delete, view, add cards to, remove cards from,
+     * and trade cards between binders. It interacts with a {@link Collection} object
+     * to retrieve cards for adding to binders and to return cards removed from binders.
+     *
+     * @param scanner A `Scanner` object used to read user input for menu choices and details.
+     * @param binders An `ArrayList` representing the list of all binders being managed.
+     * @param collection The main `Collection` of cards from which cards can be added to binders,
+     * and to which cards are returned upon removal from a binder.
+     */
     public static void manageBinders(Scanner scanner, ArrayList<Binder> binders, Collection collection) {
         while (true) {
             System.out.println("\n=== Binder Menu ===");
@@ -230,6 +301,14 @@ public class Binder {
         }
     }
 
+    /**
+     * Static helper method to find a {@link Binder} within a list of binders by its name.
+     * The search is case-insensitive.
+     *
+     * @param binders An `ArrayList` of `Binder` objects to search through.
+     * @param name    The name of the binder to find.
+     * @return The `Binder` object if found, otherwise `null`.
+     */
     public static Binder findBinder(ArrayList<Binder> binders, String name) {
         for (Binder b : binders) {
             if (b.getName().equalsIgnoreCase(name)) return b;

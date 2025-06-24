@@ -3,19 +3,48 @@ package classes;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * The `Card` class represents a collectible card with attributes such as name, rarity,
+ * variant, value, and the amount/quantity of the card.
+ * It provides methods for creating new cards interactively and for managing
+ * card properties.
+ */
 public class Card {
+
+    /**
+     * The name of the card.
+     */
     private String name;
-    private String rarity; 
-    private String variant; 
+
+    /**
+     * The rarity of the card (Common, Uncommon, Rare, Legendary).
+     */
+    private String rarity;
+
+    /**
+     * The variant of the card (e.g., Normal, Extended-art, Full-art, Alt-art).
+     */
+    private String variant;
+
+    /**
+     * The monetary value of a single card. This value can be adjusted based on the variant.
+     */
     private double value;
+    
+    /**
+     * The quantity or amount of this specific card. Differs on each collection, binder, and deck
+     * Defaults to 1 when a new card is created.
+     */
     private double amount;
 
     /**
+     * Constructs a new `Card` object with specified properties.
+     * The amount of the card is initialized to 1 by default.
      *
-     * @param name
-     * @param rarity
-     * @param variant
-     * @param value
+     * @param name    The name of the card.
+     * @param rarity  The rarity of the card.
+     * @param variant The variant of the card.
+     * @param value   The monetary value of the card.
      */
     public Card(String name, String rarity, String variant, double value) {
         this.name = name;
@@ -25,8 +54,16 @@ public class Card {
         this.amount = 1;
     }
 
-    //A public static method called when creating a card
-    //Ret
+    /**
+     * Interactively creates a new `Card` object by prompting the user for input
+     * via the provided `Scanner` object.
+     * The method guides the user through selecting rarity and, if applicable, variant,
+     * which can affect the card's final value. It handles invalid input for numeric selections.
+     *
+     * @param scanner The `Scanner` object used to read user input from the console.
+     * @return A newly created `Card` object based on user input.
+     * @throws InputMismatchException if the user enters non-integer input for rarity or variant selection.
+     */
     public static Card createCard(Scanner scanner) {
         String name;
         String rarity = "";
@@ -110,51 +147,104 @@ public class Card {
         return new Card(name, rarity, variant, value);
     }
 
+    /**
+     * Checks if this `Card` object matches another `Card` object based on
+     * its name, rarity, and variant (case-insensitive).
+     *
+     * @param other The other `Card` object to compare against.
+     * @return `true` if the name, rarity, and variant of both cards are the same (ignoring case),
+     * `false` otherwise.
+     */
     public boolean matches(Card other) {
     return this.name.equalsIgnoreCase(other.name) && this.rarity.equalsIgnoreCase(other.rarity) && this.variant.equalsIgnoreCase(other.variant);
     }
 
-    //Setters and Getters For Name
+    /**
+     * Sets the name of the card.
+     *
+     * @param name The new name for the card.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the name of the card.
+     *
+     * @return The current name of the card.
+     */
     public String getName() {
         return this.name;
     }
 
-    //Setters and Getters For Rarity
+    /**
+     * Sets the rarity of the card.
+     *
+     * @param rarity The new rarity for the card (e.g., "Common","Uncommon","Rare","Legendary").
+     */
     public void setRarity(String rarity) {
         this.rarity = rarity;
     }
 
+    /**
+     * Returns the rarity of the card.
+     *
+     * @return The current rarity of the card.
+     */
     public String getRarity() {
         return this.rarity;
     }
 
-    //Setters and Getters For Variant
+    /**
+     * Sets the variant of the card.
+     *
+     * @param variant The new variant for the card ("Normal","Extended-art","Full-art","Alt-art").
+     */
     public void setVariant(String variant) {
         this.variant = variant;
     }
 
+    /**
+     * Returns the variant of the card.
+     *
+     * @return The current variant of the card.
+     */
     public String getVariant() {
         return this.variant;
     }
 
-    //Setters and Getters For Value
+    /**
+     * Sets the monetary value of the card.
+     *
+     * @param value The new monetary value for the card.
+     */
     public void setValue(double value) {
         this.value = value;
     }
 
+    /**
+     * Returns the monetary value of the card.
+     *
+     * @return The current monetary value of the card.
+     */
     public double getValue() {
         return this.value;
     }
 
-    //Setters and Getters For Amount
+    /**
+     * Sets the amount (quantity) of this specific card.
+     *
+     * @param amount The new amount/quantity of the card.
+     */
     public void setAmount(double amount) {
         this.amount = amount;
     }
 
+    /**
+     * Returns the amount (quantity) of this specific card.
+     *
+     * @return The current amount/quantity of the card.
+     */
     public double getAmount() {
         return this.amount;
     }
