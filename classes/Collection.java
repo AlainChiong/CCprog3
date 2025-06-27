@@ -163,6 +163,13 @@ public class Collection {
         return null;
     }
 
+    /**
+     * Reduces the amount of a specific card in the collection by one.
+     * If the card's amount becomes 0 or less after reduction, the card is removed entirely from the collection.
+     * A message is printed to the console indicating the outcome (amount reduced or card removed).
+     *
+     * @param name The name of the card to be removed or have its amount reduced. Case-insensitive.
+     */    
     public void removeCardByName(String name) {
         for (int i = 0; i < cards.size(); i++) {
             Card card = cards.get(i);

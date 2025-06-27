@@ -52,6 +52,13 @@ public class Binder {
         return cards;
     }
 
+    /**
+     * Calculates and returns the total number of physical cards in the binder.
+     * This sum includes the amounts of all distinct card types present.
+     * For example, if a binder has "Goblin x5" and "Dragon x3", this method returns 8.
+     *
+     * @return The total count of all cards in the binder.
+     */
     public int getTotalCardCount() {
         int sum = 0;
         for (Card c : cards) {
@@ -62,11 +69,14 @@ public class Binder {
 
     /**
      * Attempts to add a {@link Card} to the binder.
-     * A card can only be added if the binder is not already full (max 20 cards).
-     * This method allows for duplicate card names, unlike a {@link Deck}.
+     * The card is added based on its name, rarity, and variant. If an identical card
+     * (matching name, rarity, and variant) already exists, its amount is incremented.
+     * Otherwise, the card is added as a new distinct entry with an amount of 1.
+     * The total number of cards in the binder cannot exceed 20.
      *
-     * @param card The `Card` object to be added.
-     * @return `true` if the card was successfully added, `false` otherwise (binder is full).
+     * @param card The {@link Card} object to be added. Its {@link Card#getAmount() amount} is ignored;
+     * it will be added as 1 if new, or increment an existing card's count by 1.
+     * @return `true` if the card was successfully added or its amount was increased, `false` otherwise (binder is full).
      */
     public boolean addCardB(Card card) {
         int total = getTotalCardCount();
@@ -95,11 +105,13 @@ public class Binder {
     }
 
     /**
-     * Attempts to remove a {@link Card} from the binder by its name.
-     * The first card found with a matching name (case-insensitive) will be removed.
+     * Attempts to remove one instance of a {@link Card} from the binder by its name.
+     * If the card's amount is greater than 1, its amount is decremented.
+     * If the card's amount is 1, the card entry is entirely removed from the binder.
+     * The first card found with a matching name (case-insensitive) will be processed.
      *
-     * @param name The name of the card to be removed.
-     * @return `true` if the card was found and removed, `false` if the card was not found in the binder.
+     * @param name The name of the card to be removed or have its amount decremented.
+     * @return `true` if the card was found and its amount was decremented or it was removed, `false` if the card was not found in the binder.
      */
     public boolean removeCard(String name) {
         for (int i = 0; i < cards.size(); i++) {
@@ -119,10 +131,10 @@ public class Binder {
         return false;
     }
 
-    /**
+   /**
      * Displays all cards currently in this binder to the console.
      * Cards are sorted alphabetically by name for consistent display.
-     * Includes the card's name, rarity, variant, and value.
+     * Includes the card's name, its amount, rarity, variant, and value.
      * If the binder is empty, a corresponding message is printed.
      */
     public void viewBinder() {
@@ -139,14 +151,16 @@ public class Binder {
     }
 
     /**
-     * Facilitates a trade of one card from this binder with one card from another binder.
-     * The method prompts the user to select a card from the current binder to give away
-     * and then a card from the `otherBinder` to receive.
-     * Both binders must contain the selected cards, and the `otherBinder` must not be full
-     * to receive a card. Cards are exchanged if the trade is valid.
+     * Facilitates a trade operation within the application. This method allows the user
+     * to trade a card from *this* binder for a *new* card created by the user during the trade.
+     * It prompts the user to select a card from the current binder, then guides them through
+     * creating a new card they wish to receive. A value difference is calculated and displayed,
+     * and the user is prompted for confirmation if the difference is significant.
+     * The selected card is removed from this binder and the new card is added to the main {@link Collection}
+     * and then to this binder (after reducing its count in the collection).
      *
-     * @param otherBinder The `Binder` object to trade cards with.
-     * @param scanner     The `Scanner` object used to read user input for card selection.
+     * @param scanner   The `Scanner` object used to read user input for card selection and creation.
+     * @param collection The main {@link Collection} of cards, used to manage cards being traded into/out of.
      */
     public void tradeWith(Scanner scanner, Collection collection) {
         if (this.cards.isEmpty()) {
@@ -200,13 +214,13 @@ public class Binder {
     /**
      * Provides a static menu-driven interface for managing a list of `Binder` objects.
      * This method allows users to create, delete, view, add cards to, remove cards from,
-     * and trade cards between binders. It interacts with a {@link Collection} object
+     * and initiate trades. It interacts with a {@link Collection} object
      * to retrieve cards for adding to binders and to return cards removed from binders.
      *
      * @param scanner A `Scanner` object used to read user input for menu choices and details.
      * @param binders An `ArrayList` representing the list of all binders being managed.
-     * @param collection The main `Collection` of cards from which cards can be added to binders,
-     * and to which cards are returned upon removal from a binder.
+     * @param collection The main {@link Collection} of cards from which cards can be added to binders,
+     * and to which cards are returned upon removal or moved during trades.
      */
     public static void manageBinders(Scanner scanner, ArrayList<Binder> binders, Collection collection) {
         while (true) {
@@ -319,9 +333,9 @@ public class Binder {
      * Static helper method to find a {@link Binder} within a list of binders by its name.
      * The search is case-insensitive.
      *
-     * @param binders An `ArrayList` of `Binder` objects to search through.
+     * @param binders An `ArrayList` of {@link Binder} objects to search through.
      * @param name    The name of the binder to find.
-     * @return The `Binder` object if found, otherwise `null`.
+     * @return The {@link Binder} object if found, otherwise `null`.
      */
     public static Binder findBinder(ArrayList<Binder> binders, String name) {
         for (Binder b : binders) {
