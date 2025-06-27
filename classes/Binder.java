@@ -193,6 +193,7 @@ public class Binder {
         collection.addCardC(newCard);
 
         Card newCardC = Collection.findCardInCollection(collection, newCard.getName());
+        newCardC.setAmount(newCardC.getAmount()-1);
         this.addCardB(newCardC);
     }
 
