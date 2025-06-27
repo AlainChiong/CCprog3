@@ -42,7 +42,7 @@ public class Collection {
      *
      * @param nCard The {@link Card} object to be added to the collection.
      */
-    public void addCard(Card nCard) {
+    public void addCardC(Card nCard) {
         for (Card card : cards) {
             if (card.matches(nCard)) {
                 card.setAmount(card.getAmount() + 1);
@@ -161,5 +161,21 @@ public class Collection {
             }
         }
         return null;
+    }
+
+    public void removeCardByName(String name) {
+        for (int i = 0; i < cards.size(); i++) {
+            Card card = cards.get(i);
+            if (card.getName().equalsIgnoreCase(name)) {
+                double newAmount = card.getAmount() - 1;
+                if (newAmount <= 0) {
+                    cards.remove(i);
+                    System.out.println("Card removed from collection (amount reached 0).");
+                } else {
+                    card.setAmount(newAmount);
+                    System.out.println("Card amount reduced by 1.");
+                }
+            }
+        }
     }
 }

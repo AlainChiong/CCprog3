@@ -29,7 +29,7 @@ public class Main {
             switch (choice) {
                 case '1':
                     Card newCard = Card.createCard(scanner);
-                    collection.addCard(newCard);
+                    collection.addCardC(newCard);
                     break;
                 case '2':
                     collection.modifyCardCount(scanner);

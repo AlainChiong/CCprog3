@@ -52,6 +52,14 @@ public class Binder {
         return cards;
     }
 
+    public int getTotalCardCount() {
+        int sum = 0;
+        for (Card c : cards) {
+            sum += c.getAmount();
+        }
+        return sum;
+    }
+
     /**
      * Attempts to add a {@link Card} to the binder.
      * A card can only be added if the binder is not already full (max 20 cards).
@@ -60,13 +68,29 @@ public class Binder {
      * @param card The `Card` object to be added.
      * @return `true` if the card was successfully added, `false` otherwise (binder is full).
      */
-    public boolean addCard(Card card) {
-        if (cards.size() >= 20) {
-            System.out.println("Binder is full (max 20 cards).");
+    public boolean addCardB(Card card) {
+        int total = getTotalCardCount();
+        if (total >= 20) {
+            System.out.println("Binder is full (max 20 total cards).");
             return false;
         }
-        cards.add(card);
-        System.out.println(card.getName() + " added to binder.");
+        for (Card c : cards) {
+            if (c.matches(card)) { 
+                int availableSpace = 20 - total;
+                if (availableSpace <= 0) {
+                    System.out.println("Cannot add more cards. Binder is full.");
+                    return false;
+                }
+
+                c.setAmount(c.getAmount() + 1);
+                System.out.println(card.getName() + " amount increased in binder.");
+                return true;
+            }
+        }
+        Card newCard = new Card(card.getName(), card.getRarity(), card.getVariant(), card.getValue());
+        newCard.setAmount(1);
+        cards.add(newCard);
+        System.out.println(newCard.getName() + " added to binder.");
         return true;
     }
 
@@ -80,8 +104,14 @@ public class Binder {
     public boolean removeCard(String name) {
         for (int i = 0; i < cards.size(); i++) {
             if (cards.get(i).getName().equalsIgnoreCase(name)) {
-                cards.remove(i);
-                System.out.println("Card removed from binder.");
+                Card card = cards.get(i);
+                if (card.getAmount() > 1) {
+                    card.setAmount(card.getAmount() - 1);
+                    System.out.println("Decreased amount of " + card.getName() + " in binder.");
+                } else {
+                    cards.remove(i);
+                    System.out.println("Card removed from binder.");
+                }
                 return true;
             }
         }
@@ -103,8 +133,8 @@ public class Binder {
         System.out.println("=== " + name + "'s Binder ===");
         Collections.sort(cards, Comparator.comparing(Card::getName));
         for (Card card : cards) {
-            System.out.printf("%s (%s, %s) - $%.2f\n",
-                card.getName(), card.getRarity(), card.getVariant(), card.getValue());
+            System.out.printf("%s x%.0f (%s, %s) - $%.2f\n",
+                card.getName(), card.getAmount(), card.getRarity(), card.getVariant(), card.getValue());
         }
     }
 
@@ -118,11 +148,7 @@ public class Binder {
      * @param otherBinder The `Binder` object to trade cards with.
      * @param scanner     The `Scanner` object used to read user input for card selection.
      */
-    public void tradeWith(Binder otherBinder, Scanner scanner) {
-        if (this == otherBinder) {
-            System.out.println("You cannot trade with the same binder.");
-            return;
-        }
+    public void tradeWith(Scanner scanner, Collection collection) {
         if (this.cards.isEmpty()) {
             System.out.println("Your binder has no cards to trade.");
             return;
@@ -134,41 +160,40 @@ public class Binder {
         for (Card c : this.cards) {
             if (c.getName().equalsIgnoreCase(cardName)) {
                 myCard = c;
-                break;
             }
         }
         if (myCard == null) {
             System.out.println("Card not found in this binder.");
             return;
         }
-        if (otherBinder.cards.size() >= 20) {
-            System.out.println("Trade failed. The other binder is full.");
-            return;
-        }
+        
+        System.out.println("Now, input the card you will receive in return.");
+         Card newCard = Card.createCard(scanner);  // You create a new card directly
 
-        System.out.println("\n--- " + otherBinder.name + "'s Cards ---");
-        otherBinder.viewBinder();
-        System.out.print("Enter the name of the card to receive: ");
-        String theirCardName = scanner.nextLine();
-
-        Card theirCard = null;
-        for (Card c : otherBinder.cards) {
-            if (c.getName().equalsIgnoreCase(theirCardName)) {
-                theirCard = c;
-                break;
+        double valueDiff = Math.abs(myCard.getValue() - newCard.getValue());
+        if (valueDiff > 1.0) {
+            System.out.printf("The value difference is $%.2f. Proceed with trade? (Yes/No): ", valueDiff);
+            scanner.nextLine();
+            String confirm = scanner.nextLine().trim().toLowerCase();
+            if (!confirm.equals("yes")) {
+                System.out.println("Trade cancelled.");
+                return;
             }
         }
-
-        if (theirCard == null) {
-            System.out.println("Card not found in the other binder.");
-            return;
+        this.removeCard(myCard.getName());
+        boolean stillInBinder = false;
+        for (Card c : this.cards) {
+            if (c.getName().equalsIgnoreCase(myCard.getName())) {
+                stillInBinder = true;
+            }
         }
-        this.cards.remove(myCard);
-        otherBinder.cards.remove(theirCard);
+        if(!stillInBinder){
+            collection.removeCardByName(myCard.getName());
+        }
+        collection.addCardC(newCard);
 
-        this.cards.add(theirCard);
-        otherBinder.cards.add(myCard);
-        System.out.println("Successfully traded " + myCard.getName() + " to " + theirCard.getName() + ".");
+        Card newCardC = Collection.findCardInCollection(collection, newCard.getName());
+        this.addCardB(newCardC);
     }
 
     /**
@@ -190,11 +215,12 @@ public class Binder {
             System.out.println("3 - View Binders");
             System.out.println("4 - Add Card to Binder");
             System.out.println("5 - Remove Card from Binder");
-            System.out.println("6 - Trade Cards Between Binders");
+            System.out.println("6 - Trade Cards");
             System.out.println("7 - Go Back");
             System.out.print("Enter choice: ");
 
             String input = scanner.nextLine();
+            System.out.print("\n");
             if (input.isEmpty()) continue;
             char choice = input.charAt(0);
 
@@ -243,7 +269,7 @@ public class Binder {
                     String cardName = scanner.nextLine();
                     Card cardToAdd = Collection.findCardInCollection(collection, cardName);
                     if (cardToAdd != null && cardToAdd.getAmount() >= 1) {
-                        binder.addCard(cardToAdd);
+                        binder.addCardB(cardToAdd);
                         cardToAdd.setAmount(cardToAdd.getAmount() - 1);
                     } else {
                         System.out.println("Card not found or no copies left.");
@@ -268,11 +294,6 @@ public class Binder {
                     }
                     break;
                 case '6':
-                    if (binders.size() < 2) {
-                        System.out.println("Need at least 2 binders to trade.");
-                        break;
-                    }
-
                     System.out.print("Enter your binder name (trading from): ");
                     String fName = scanner.nextLine();
                     Binder fBinder = findBinder(binders, fName);
@@ -281,17 +302,9 @@ public class Binder {
                         System.out.println("Binder not found.");
                         break;
                     }
-
-                    System.out.print("Enter the binder to trade with: ");
-                    String tName = scanner.nextLine();
-                    Binder tBinder = findBinder(binders, tName);
-
-                    if (tBinder == null) {
-                        System.out.println("Other binder not found.");
-                        break;
-                    }
-
-                    fBinder.tradeWith(tBinder, scanner);
+                    
+                    fBinder.tradeWith(scanner, collection);
+                    scanner.nextLine();
                     break;
                 case '7':
                     return;
