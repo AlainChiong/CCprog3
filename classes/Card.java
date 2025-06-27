@@ -234,7 +234,13 @@ public class Card {
      * @return The current monetary value of the card, including variant multiplier.
      */
     public double getValue() {
-        return this.value * variant.getMultiplier();
+        if (variant == null) {
+            return getBaseValue();
+        }
+        else {
+            return this.value * variant.getMultiplier();
+        }
+        
     }
 
     /**
