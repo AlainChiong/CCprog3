@@ -7,6 +7,10 @@ package enums;
  */
 public enum Variant {
     /**
+     * This variant is just a placeholder for cards with no variants.
+     */
+    INVALID(1.0),
+    /**
      * This variant applies no additional multiplier to the card's base value.
      */
     NORMAL(1.0),
@@ -77,6 +81,8 @@ public enum Variant {
     @Override
     public String toString() {
         switch (this) {
+            case INVALID:
+                return "Invalid";
             case NORMAL:
                 return "Normal";
             case EXTENDED_ART:

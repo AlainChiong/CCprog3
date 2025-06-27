@@ -139,6 +139,10 @@ public class Card {
                 }
             }
         }
+
+        else {
+            variant = Variant.INVALID;
+        }
         return new Card(name, rarity, variant, value);
     }
 
@@ -151,7 +155,7 @@ public class Card {
      * `false` otherwise.
      */
     public boolean matches(Card other) {
-    return this.name.equalsIgnoreCase(other.name) && this.rarity.toString().equalsIgnoreCase(other.rarity.toString()) && this.variant.toString().equalsIgnoreCase(other.variant.toString());
+        return this.name.equalsIgnoreCase(other.name) && this.rarity.toString().equalsIgnoreCase(other.rarity.toString()) && this.variant.toString().equalsIgnoreCase(other.variant.toString());
     }
 
     /**
@@ -234,13 +238,7 @@ public class Card {
      * @return The current monetary value of the card, including variant multiplier.
      */
     public double getValue() {
-        if (variant == null) {
-            return getBaseValue();
-        }
-        else {
-            return this.value * variant.getMultiplier();
-        }
-        
+        return this.value * variant.getMultiplier();
     }
 
     /**
