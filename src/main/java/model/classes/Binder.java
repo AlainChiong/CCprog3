@@ -17,12 +17,14 @@ public class Binder {
    /**
      * The name of the binder.
      */
-    private String name;
+    protected String name;
 
     /**
      * An `ArrayList` to store the {@link CardModel} objects contained within this binder.
      */
-    private ArrayList<CardModel> cards;
+    protected ArrayList<CardModel> cards;
+
+    protected String type;
 
     /**
      * Constructs a new `Binder` with a specified name and initializes an empty list of cards.

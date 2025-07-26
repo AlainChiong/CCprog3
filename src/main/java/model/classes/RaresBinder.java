@@ -1,5 +1,5 @@
 package main.java.model.classes;
 
-public class RaresBinder extends SellableBinder{
+public class RaresBinder extends Binder{
     
 }

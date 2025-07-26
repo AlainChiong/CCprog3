@@ -16,12 +16,14 @@ public class Deck {
     /**
      * The name of the deck.
      */
-    private String name;
+    protected String name;
     /**
      * An `ArrayList` to store the `Card` objects that are part of this deck.
      * Each card in the deck is considered a unique instance (only one copy per card name).
      */
-    private ArrayList<CardModel> cards;
+    protected ArrayList<CardModel> cards;
+
+    protected String type;
 
     /**
      * Constructs a new `Deck` with a specified name and initializes an empty list of cards.
