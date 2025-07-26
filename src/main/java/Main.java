@@ -1,10 +1,23 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+package main.java;
 
-import classes.*;
+import main.java.controller.MainController;
+
+import javax.swing.SwingUtilities;
 
 public class Main {
+
     public static void main(String args[]) {
+
+        SwingUtilities.invokeLater(
+            new Runnable() {
+                @Override
+                public void run() {
+                    new MainController();
+                }
+            }
+        );
+
+        /*
         Scanner scanner = new Scanner(System.in);
         Collection collection = new Collection();
         ArrayList<Binder> binders = new ArrayList<>();
@@ -57,6 +70,7 @@ public class Main {
                     System.out.println("Invalid input.");
             }
         }
-        scanner.close();
-    }    
+        scanner.close(); */
+    }     
+    
 }

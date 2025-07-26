@@ -1,10 +1,10 @@
-package classes;
+package main.java.model.classes;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import enums.Rarity;
-import enums.Variant;
+import main.java.model.enums.Rarity;
+import main.java.model.enums.Variant;
 
 /**
  * The `Card` class represents a collectible card with attributes such as name, rarity,

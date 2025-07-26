@@ -1,4 +1,4 @@
-package enums;
+package main.java.model.enums;
 
 /**
  * Defines the possible visual variants for collectible cards, particularly

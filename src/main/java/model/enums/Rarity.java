@@ -1,4 +1,4 @@
-package enums;
+package main.java.model.enums;
 
 /**
  * Defines the possible rarity levels for a collectible card.
