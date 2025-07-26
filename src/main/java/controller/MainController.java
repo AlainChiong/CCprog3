@@ -10,20 +10,26 @@ import main.java.view.MainView;
 
 public class MainController {
     private final MainView mainView;
+
     private final MainModel mainModel;
+    private ManageCollectionController manageCollectionController;
 
 
 
     public MainController() {
         this.mainView = new MainView("Trading Card Inventory System");
-        this.mainModel = new MainModel(this);
+        this.mainModel = new MainModel();
+
+        this.manageCollectionController = new ManageCollectionController(
+                mainModel,
+                mainView
+        );
 
         setupAllViewListeners();
     }
 
     private void setupAllViewListeners() {
         setupMainMenuViewListeners();
-        setupManageCollectionViewListeners();
     }
 
     /**
@@ -57,45 +63,7 @@ public class MainController {
                 quitButtonPressed();
             }
         });
-    }
-    
-    /**
-     * Sets up ActionListeners for buttons specifically on the ManageCollectionView.
-     */
-    private void setupManageCollectionViewListeners() {
-        mainView.getManageCollectionView().setAddCardButtonActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addCardButtonPressed();
-            }
-        });
 
-        mainView.getManageCollectionView().setModifyCardCountButtonActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modifyCardCountButtonPressed();
-            }
-        });
-
-        mainView.getManageCollectionView().setViewCardDetailsButtonActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                viewCardDetailsButtonPressed();
-            }
-        });
-
-        mainView.getManageCollectionView().setSellCardButtonActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sellCardButtonPressed();
-            }
-        });
-        mainView.getManageCollectionView().setSellCardButtonActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sellCardButtonPressed();
-            }
-        });
         mainView.getManageCollectionView().setBackButtonActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
                 backButtonPressed();
@@ -106,13 +74,17 @@ public class MainController {
     // --- Action methods triggered by MainMenuView buttons ---
 
     public void manageBindersButtonPressed() {
-         mainView.showPanel((mainView.getManageBindersViewString()));
+        System.out.println("Manage Binders Button Pressed");
+        mainView.showPanel((mainView.getManageBindersViewString()));
     }
     public void manageDecksButtonPressed() {
-         mainView.showPanel((mainView.getManageDecksViewString()));
+        System.out.println("Manage Deck Button Pressed");
+        mainView.showPanel((mainView.getManageDecksViewString()));
     }
     public void manageCollectionButtonPressed() {
-         mainView.showPanel((mainView.getManageCollectionViewString()));
+        System.out.println("Manage Collection Button Pressed");
+        mainView.showPanel((mainView.getManageCollectionViewString()));
+        manageCollectionController.refreshCardDisplay();
     }
     public void quitButtonPressed() {
        int choice = mainView.showConfirmDialog(
@@ -125,23 +97,6 @@ public class MainController {
         if (choice == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
-    }
-
-    // --- Action methods triggered by ManageCollection buttons ---
-
-    public void addCardButtonPressed() {
-
-    }
-    public void modifyCardCountButtonPressed() {
-        
-    }
-
-    public void viewCardDetailsButtonPressed() {
-
-    }
-
-    public void sellCardButtonPressed() {
-
     }
 
     public void backButtonPressed() {

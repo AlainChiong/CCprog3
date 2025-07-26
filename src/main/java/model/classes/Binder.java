@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 
 /**
- * The `Binder` class represents a physical or digital binder used to store a collection of {@link Card} objects.
+ * The `Binder` class represents a physical or digital binder used to store a collection of {@link CardModel} objects.
  * A binder has a name and a fixed capacity (maximum of 20 cards). Unlike a {@link Deck}, a binder
  * does not enforce uniqueness of card names; multiple copies of the same card (by name) can be added,
  * but only up to the maximum capacity. It also provides functionality for trading cards with other binders.
@@ -20,9 +20,9 @@ public class Binder {
     private String name;
 
     /**
-     * An `ArrayList` to store the {@link Card} objects contained within this binder.
+     * An `ArrayList` to store the {@link CardModel} objects contained within this binder.
      */
-    private ArrayList<Card> cards;
+    private ArrayList<CardModel> cards;
 
     /**
      * Constructs a new `Binder` with a specified name and initializes an empty list of cards.
@@ -44,11 +44,11 @@ public class Binder {
     }
 
     /**
-     * Returns the `ArrayList` containing all {@link Card} objects in this binder.
+     * Returns the `ArrayList` containing all {@link CardModel} objects in this binder.
      *
      * @return An `ArrayList` of cards currently in the binder.
      */
-    public ArrayList<Card> getCards() {
+    public ArrayList<CardModel> getCards() {
         return cards;
     }
 
@@ -61,30 +61,30 @@ public class Binder {
      */
     public int getTotalCardCount() {
         int sum = 0;
-        for (Card c : cards) {
+        for (CardModel c : cards) {
             sum += c.getAmount();
         }
         return sum;
     }
 
     /**
-     * Attempts to add a {@link Card} to the binder.
+     * Attempts to add a {@link CardModel} to the binder.
      * The card is added based on its name, rarity, and variant. If an identical card
      * (matching name, rarity, and variant) already exists, its amount is incremented.
      * Otherwise, the card is added as a new distinct entry with an amount of 1.
      * The total number of cards in the binder cannot exceed 20.
      *
-     * @param card The {@link Card} object to be added. Its {@link Card#getAmount() amount} is ignored;
+     * @param card The {@link CardModel} object to be added. Its {@link CardModel#getAmount() amount} is ignored;
      * it will be added as 1 if new, or increment an existing card's count by 1.
      * @return `true` if the card was successfully added or its amount was increased, `false` otherwise (binder is full).
      */
-    public boolean addCardB(Card card) {
+    public boolean addCardB(CardModel card) {
         int total = getTotalCardCount();
         if (total >= 20) {
             System.out.println("Binder is full (max 20 total cards).");
             return false;
         }
-        for (Card c : cards) {
+        for (CardModel c : cards) {
             if (c.matches(card)) { 
                 int availableSpace = 20 - total;
                 if (availableSpace <= 0) {
@@ -97,7 +97,7 @@ public class Binder {
                 return true;
             }
         }
-        Card newCard = new Card(card.getName(), card.getRarity(), card.getVariant(), card.getValue());
+        CardModel newCard = new CardModel(card.getName(), card.getRarity(), card.getVariant(), card.getValue());
         newCard.setAmount(1);
         cards.add(newCard);
         System.out.println(newCard.getName() + " added to binder.");
@@ -105,7 +105,7 @@ public class Binder {
     }
 
     /**
-     * Attempts to remove one instance of a {@link Card} from the binder by its name.
+     * Attempts to remove one instance of a {@link CardModel} from the binder by its name.
      * If the card's amount is greater than 1, its amount is decremented.
      * If the card's amount is 1, the card entry is entirely removed from the binder.
      * The first card found with a matching name (case-insensitive) will be processed.
@@ -116,7 +116,7 @@ public class Binder {
     public boolean removeCard(String name) {
         for (int i = 0; i < cards.size(); i++) {
             if (cards.get(i).getName().equalsIgnoreCase(name)) {
-                Card card = cards.get(i);
+                CardModel card = cards.get(i);
                 if (card.getAmount() > 1) {
                     card.setAmount(card.getAmount() - 1);
                     System.out.println("Decreased amount of " + card.getName() + " in binder.");
@@ -143,8 +143,8 @@ public class Binder {
             return;
         }
         System.out.println("=== " + name + "'s Binder ===");
-        Collections.sort(cards, Comparator.comparing(Card::getName));
-        for (Card card : cards) {
+        Collections.sort(cards, Comparator.comparing(CardModel::getName));
+        for (CardModel card : cards) {
             System.out.printf("%s x%.0f (%s, %s) - $%.2f\n",
                 card.getName(), card.getAmount(), card.getRarity(), card.getVariant(), card.getValue());
         }
@@ -156,13 +156,13 @@ public class Binder {
      * It prompts the user to select a card from the current binder, then guides them through
      * creating a new card they wish to receive. A value difference is calculated and displayed,
      * and the user is prompted for confirmation if the difference is significant.
-     * The selected card is removed from this binder and the new card is added to the main {@link Collection}
+     * The selected card is removed from this binder and the new card is added to the main {@link CollectionModel}
      * and then to this binder (after reducing its count in the collection).
      *
      * @param scanner   The `Scanner` object used to read user input for card selection and creation.
-     * @param collection The main {@link Collection} of cards, used to manage cards being traded into/out of.
+     * @param collection The main {@link CollectionModel} of cards, used to manage cards being traded into/out of.
      */
-    public void tradeWith(Scanner scanner, Collection collection) {
+    public void tradeWith(Scanner scanner, CollectionModel collection) {
         if (this.cards.isEmpty()) {
             System.out.println("Your binder has no cards to trade.");
             return;
@@ -170,8 +170,8 @@ public class Binder {
         this.viewBinder();
         System.out.print("Enter the name of the card to trade from " + this.name + ": ");
         String cardName = scanner.nextLine();
-        Card myCard = null;
-        for (Card c : this.cards) {
+        CardModel myCard = null;
+        for (CardModel c : this.cards) {
             if (c.getName().equalsIgnoreCase(cardName)) {
                 myCard = c;
             }
@@ -182,7 +182,7 @@ public class Binder {
         }
         
         System.out.println("Now, input the card you will receive in return.");
-         Card newCard = Card.createCard(scanner);  // You create a new card directly
+         CardModel newCard = CardModel.createCard(scanner);  // You create a new card directly
 
         double valueDiff = Math.abs(myCard.getValue() - newCard.getValue());
         if (valueDiff > 1.0) {
@@ -196,7 +196,7 @@ public class Binder {
         }
         this.removeCard(myCard.getName());
         boolean stillInBinder = false;
-        for (Card c : this.cards) {
+        for (CardModel c : this.cards) {
             if (c.getName().equalsIgnoreCase(myCard.getName())) {
                 stillInBinder = true;
             }
@@ -204,9 +204,9 @@ public class Binder {
         if(!stillInBinder){
             collection.removeCardByName(myCard.getName());
         }
-        collection.addCardC(newCard);
+        collection.addCard(newCard);
 
-        Card newCardC = Collection.findCardInCollection(collection, newCard.getName());
+        CardModel newCardC = CollectionModel.findCardInCollection(collection, newCard.getName());
         newCardC.setAmount(newCardC.getAmount()-1);
         this.addCardB(newCardC);
     }
@@ -214,15 +214,15 @@ public class Binder {
     /**
      * Provides a static menu-driven interface for managing a list of `Binder` objects.
      * This method allows users to create, delete, view, add cards to, remove cards from,
-     * and initiate trades. It interacts with a {@link Collection} object
+     * and initiate trades. It interacts with a {@link CollectionModel} object
      * to retrieve cards for adding to binders and to return cards removed from binders.
      *
      * @param scanner A `Scanner` object used to read user input for menu choices and details.
      * @param binders An `ArrayList` representing the list of all binders being managed.
-     * @param collection The main {@link Collection} of cards from which cards can be added to binders,
+     * @param collection The main {@link CollectionModel} of cards from which cards can be added to binders,
      * and to which cards are returned upon removal or moved during trades.
      */
-    public static void manageBinders(Scanner scanner, ArrayList<Binder> binders, Collection collection) {
+    public static void manageBinders(Scanner scanner, ArrayList<Binder> binders, CollectionModel collection) {
         while (true) {
             System.out.println("\n=== Binder Menu ===");
             System.out.println("1 - Create New Binder");
@@ -282,7 +282,7 @@ public class Binder {
                     collection.displayCollection();
                     System.out.print("Enter card name to add: ");
                     String cardName = scanner.nextLine();
-                    Card cardToAdd = Collection.findCardInCollection(collection, cardName);
+                    CardModel cardToAdd = CollectionModel.findCardInCollection(collection, cardName);
                     if (cardToAdd != null && cardToAdd.getAmount() >= 1) {
                         binder.addCardB(cardToAdd);
                         cardToAdd.setAmount(cardToAdd.getAmount() - 1);
@@ -302,7 +302,7 @@ public class Binder {
                     System.out.print("Enter card name to remove: ");
                     String removeCard = scanner.nextLine();
                     if (b.removeCard(removeCard)) {
-                        Card dummy = Collection.findCardInCollection(collection, removeCard);
+                        CardModel dummy = CollectionModel.findCardInCollection(collection, removeCard);
                         if (dummy != null) {
                             dummy.setAmount(dummy.getAmount() + 1);
                         }

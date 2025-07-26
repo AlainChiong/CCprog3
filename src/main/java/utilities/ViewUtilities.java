@@ -7,6 +7,12 @@ import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 
 public class ViewUtilities {
     /**
@@ -45,6 +51,35 @@ public class ViewUtilities {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(new Color(60, 60, 100), 2));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+
+    
+    public static JButton createStyledButton(String text) {
+        JButton button = new JButton(text);
+        
+        button.setFocusPainted(false); 
+        return button;
+    }
+
+    public static JLabel createStyledLabel(String text) {
+        JLabel label = new JLabel(text);
+        return label;
+    }
+    public static void styleTextField(JTextField textField) {
+
+    }
+
+    public static void styleComboBox(JComboBox<?> comboBox) {
+    }
+
+    public static void styleSpinner(JSpinner spinner) {
+ 
+        JComponent editor = spinner.getEditor();
+        if (editor instanceof JSpinner.DefaultEditor) {
+            JFormattedTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
+
+            textField.setHorizontalAlignment(JTextField.LEADING); 
+        }
     }
 
 }

@@ -21,7 +21,7 @@ public class MainMenuView extends JPanel {
     private JButton quitButton;
 
     public MainMenuView() {
-         setLayout(new GridBagLayout());
+        setLayout(new GridBagLayout());
         setBackground(new Color(30, 30, 70));
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();

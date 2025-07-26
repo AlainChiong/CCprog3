@@ -3,25 +3,26 @@ package main.java.model.classes;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 /**
- * The `Collection` class manages a collection of {@link Card} objects.
+ * The `Collection` class manages a collection of {@link CardModel} objects.
  * It provides functionalities to add cards, display the collection,
  * modify card counts, view individual card details, and find specific cards.
- * {@link Card} are stored in an `ArrayList`.
+ * {@link CardModel} are stored in an `ArrayList`.
  */
-public class Collection {
+public class CollectionModel {
     /**
-     * An `ArrayList` to store the {@link Card} objects in this collection.
+     * An `ArrayList` to store the {@link CardModel} objects in this collection.
      */
-    private ArrayList<Card> cards;
+    private List<CardModel> cards;
 
     /**
      * Constructs a new, empty `Collection` of cards.
      * Initializes the internal `ArrayList` to store cards.
      */
-    public Collection() {
+    public CollectionModel() {
         cards = new ArrayList<>();
     }
 
@@ -36,27 +37,27 @@ public class Collection {
     }
 
     /**
-     * Adds a new {@link Card} to the collection.
+     * Adds a new {@link CardModel} to the collection.
      * If a card with the same name, rarity, and variant already exists in the collection,
      * its amount is incremented by one. Otherwise, the new card is added as a distinct entry.
      *
-     * @param nCard The {@link Card} object to be added to the collection.
+     * @param nCard The {@link CardModel} object to be added to the collection.
      */
-    public void addCardC(Card nCard) {
-        for (Card card : cards) {
+    public boolean addCard(CardModel nCard) {
+        for (CardModel card : cards) {
             if (card.matches(nCard)) {
                 card.setAmount(card.getAmount() + 1);
                 System.out.println("Duplicate found. Amount increased.");
-                return;
+                return false;
             }
         }
         cards.add(nCard);
-        System.out.println("New card added.");
+        return true;
     }
 
     /**
      * Displays all cards currently in the collection to the console.
-     * {@link Card} are sorted alphabetically by name before being displayed.
+     * {@link CardModel} are sorted alphabetically by name before being displayed.
      * If the collection is empty, a corresponding message is printed.
      * The output format is "CardName xAmount".
      */
@@ -67,8 +68,8 @@ public class Collection {
         }
         System.out.println("\nYour Collection:");
         // Sort cards by name for consistent display
-        Collections.sort(cards, Comparator.comparing(Card::getName));
-        for (Card c : cards) {
+        Collections.sort(cards, Comparator.comparing(CardModel::getName));
+        for (CardModel c : cards) {
             System.out.printf("%s x%.0f\n", c.getName(), c.getAmount());
         }
     }
@@ -99,7 +100,7 @@ public class Collection {
             return;
         }
 
-        Card selected = cards.get(choice);
+        CardModel selected = cards.get(choice);
         System.out.print("Enter amount to increase/decrease (+/-): ");
         double change = scanner.nextDouble();
         scanner.nextLine(); // Consume newline
@@ -121,7 +122,7 @@ public class Collection {
      * @param name The name of the card whose details are to be viewed. Case-insensitive.
      */
     public void viewCardDetails(String name) {
-        for (Card card : cards) {
+        for (CardModel card : cards) {
             if (card.getName().equalsIgnoreCase(name)) {
                 System.out.println("=== Card Details ===");
                 System.out.println("Name   : " + card.getName());
@@ -135,13 +136,35 @@ public class Collection {
         System.out.println("Card not found in collection.");
     }
 
+
+   /**
+     * Retrieves a list of all cards in the collection, sorted alphabetically by name.
+     * The internal order of the collection remains unchanged.
+     *
+     * @return A new, sorted List containing all CardModel objects.
+     */
+    public List<CardModel> getCardsSortedByName() {
+        List<CardModel> sortedCards = new ArrayList<>(cards); // Create a new, mutable copy
+
+
+        Collections.sort(sortedCards, new Comparator<CardModel>() {
+            @Override
+            public int compare(CardModel card1, CardModel card2) {
+                // Compare card names case-insensitively
+                return card1.getName().compareToIgnoreCase(card2.getName());
+            }
+        });
+        // --------------------------------------------------------
+
+        return sortedCards;
+    }
     /**
-     * Returns the internal `ArrayList` of {@link Card} objects managed by this collection.
+     * Returns the internal `ArrayList` of {@link CardModel} objects managed by this collection.
      * This provides direct access to the underlying list of cards.
      *
      * @return The `ArrayList` containing all cards in the collection.
      */
-    public ArrayList<Card> getCards() {
+    public List<CardModel> getCards() {
         return cards;
     }
 
@@ -154,8 +177,8 @@ public class Collection {
      * @param name       The name of the card to find.
      * @return The `Card` object if found, otherwise `null`.
      */
-    public static Card findCardInCollection(Collection collection, String name) {
-        for (Card c : collection.getCards()) {
+    public static CardModel findCardInCollection(CollectionModel collection, String name) {
+        for (CardModel c : collection.getCards()) {
             if (c.getName().equalsIgnoreCase(name)){
                 return c;
             }
@@ -172,7 +195,7 @@ public class Collection {
      */    
     public void removeCardByName(String name) {
         for (int i = 0; i < cards.size(); i++) {
-            Card card = cards.get(i);
+            CardModel card = cards.get(i);
             if (card.getName().equalsIgnoreCase(name)) {
                 double newAmount = card.getAmount() - 1;
                 if (newAmount <= 0) {

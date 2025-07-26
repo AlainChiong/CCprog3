@@ -13,7 +13,7 @@ import main.java.model.enums.Variant;
  * card properties. The value of the card is influenced by its variant, which is
  * defined by the {@link Variant} enum.
  */
-public class Card {
+public class CardModel {
 
     /**
      * The name of the card.
@@ -54,7 +54,7 @@ public class Card {
      * @param value   The monetary base value of the card. The final value will be
      * calculated using this base value and the variant's multiplier.
      */
-    public Card(String name, Rarity rarity, Variant variant, double value) {
+    public CardModel(String name, Rarity rarity, Variant variant, double value) {
         this.name = name;
         this.rarity = rarity;
         this.variant = variant;
@@ -75,7 +75,7 @@ public class Card {
      * @return A newly created `Card` object based on user input. The card's final value
      * will be calculated based on the base value and selected variant.
      */
-    public static Card createCard(Scanner scanner) {
+    public static CardModel createCard(Scanner scanner) {
         String name;
         Rarity rarity = null;
         Variant variant = null;
@@ -143,7 +143,7 @@ public class Card {
         else {
             variant = Variant.INVALID;
         }
-        return new Card(name, rarity, variant, value);
+        return new CardModel(name, rarity, variant, value);
     }
 
     /**
@@ -154,7 +154,7 @@ public class Card {
      * @return `true` if the name, rarity, and variant of both cards are the same (ignoring case),
      * `false` otherwise.
      */
-    public boolean matches(Card other) {
+    public boolean matches(CardModel other) {
         return this.name.equalsIgnoreCase(other.name) && this.rarity.toString().equalsIgnoreCase(other.rarity.toString()) && this.variant.toString().equalsIgnoreCase(other.variant.toString());
     }
 

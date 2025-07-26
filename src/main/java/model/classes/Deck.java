@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.Scanner;
 
 /**
- * The `Deck` class represents a collection of {@link Card} objects that form a playable deck.
+ * The `Deck` class represents a collection of {@link CardModel} objects that form a playable deck.
  * A deck has a name and a limited capacity (maximum of 10 unique cards).
  * It also enforces a rule that only one copy of a specific card (by name) is allowed in the deck.
  * This class provides functionality for managing cards within a deck,
@@ -21,7 +21,7 @@ public class Deck {
      * An `ArrayList` to store the `Card` objects that are part of this deck.
      * Each card in the deck is considered a unique instance (only one copy per card name).
      */
-    private ArrayList<Card> cards;
+    private ArrayList<CardModel> cards;
 
     /**
      * Constructs a new `Deck` with a specified name and initializes an empty list of cards.
@@ -43,28 +43,28 @@ public class Deck {
     }
 
     /**
-     * Returns the `ArrayList` containing all {@link Card} objects in this deck.
+     * Returns the `ArrayList` containing all {@link CardModel} objects in this deck.
      *
      * @return An `ArrayList` of cards currently in the deck.
      */
-    public ArrayList<Card> getCards() {
+    public ArrayList<CardModel> getCards() {
         return cards;
     }
 
     /**
-     * Attempts to add a {@link Card} to the deck.
+     * Attempts to add a {@link CardModel} to the deck.
      * A card can only be added if the deck is not already full (max 10 unique cards)
      * and if a card with the same name does not already exist in the deck.
      *
      * @param card The `Card` object to be added.
      * @return `true` if the card was successfully added, `false` otherwise (deck full or duplicate card name).
      */
-    public boolean addCard(Card card) {
+    public boolean addCard(CardModel card) {
         if (cards.size() >= 10) {
             System.out.println("Deck is full (max 10 unique cards).");
             return false;
         }
-        for (Card c : cards) {
+        for (CardModel c : cards) {
             // Check for unique card name, case-insensitive
             if (c.getName().equalsIgnoreCase(card.getName())) {
                 System.out.println("Only one copy of this card is allowed in a deck.");
@@ -77,7 +77,7 @@ public class Deck {
     }
 
     /**
-     * Attempts to remove a {@link Card} from the deck by its name.
+     * Attempts to remove a {@link CardModel} from the deck by its name.
      * The first card found with a matching name (case-insensitive) will be removed.
      *
      * @param name The name of the card to be removed.
@@ -108,21 +108,21 @@ public class Deck {
         }
         System.out.println("=== " + name + "'s Deck ===");
         // Sort cards by name before displaying
-        Collections.sort(cards, Comparator.comparing(Card::getName));
-        for (Card card : cards) {
+        Collections.sort(cards, Comparator.comparing(CardModel::getName));
+        for (CardModel card : cards) {
             // Displays card details including rarity, variant, and value
             System.out.printf("%s (%s, %s) - $%.2f\n", card.getName(), card.getRarity(), card.getVariant(), card.getValue());
         }
     }
 
     /**
-     * Displays detailed information for a specific {@link Card} within this deck by its name.
+     * Displays detailed information for a specific {@link CardModel} within this deck by its name.
      * If found, it prints the card's name, rarity, variant, and value.
      *
      * @param name The name of the card whose details are to be viewed. Case-insensitive.
      */
     public void viewCardDetails(String name) {
-        for (Card card : cards) {
+        for (CardModel card : cards) {
             if (card.getName().equalsIgnoreCase(name)) {
                 System.out.printf("Name: %s\nRarity: %s\nVariant: %s\nValue: $%.2f\n", card.getName(), card.getRarity(), card.getVariant(), card.getValue());
                 return;
@@ -134,13 +134,13 @@ public class Deck {
     /**
      * Provides a static menu-driven interface for managing a list of `Deck` objects.
      * This method allows users to create, delete, view, add cards to, and remove cards from decks.
-     * It interacts with a {@link Collection} object to retrieve cards for adding to decks.
+     * It interacts with a {@link CollectionModel} object to retrieve cards for adding to decks.
      *
      * @param scanner    The `Scanner` object used to read user input for menu choices and details.
      * @param decks      An `ArrayList` representing the list of all decks being managed.
      * @param collection The main Collection of cards from which cards can be added to decks.
      */
-    public static void manageDecks(Scanner scanner, ArrayList<Deck> decks, Collection collection) {
+    public static void manageDecks(Scanner scanner, ArrayList<Deck> decks, CollectionModel collection) {
         while (true) {
             System.out.println("\n=== Deck Menu ===");
             System.out.println("1 - Create New Deck");
@@ -198,7 +198,7 @@ public class Deck {
                     collection.displayCollection();
                     System.out.print("Enter card name from collection to add to deck: ");
                     String cardName = scanner.nextLine();
-                    Card cardToAdd = Collection.findCardInCollection(collection, cardName);
+                    CardModel cardToAdd = CollectionModel.findCardInCollection(collection, cardName);
                     
                     // Check if card exists in collection and if there's at least one copy
                     if (cardToAdd != null && cardToAdd.getAmount() >= 1) {
@@ -225,7 +225,7 @@ public class Deck {
                     String removeCardName = scanner.nextLine();
                     // Attempt to remove card from deck. If successful, increase amount in main collection.
                     if (d.removeCard(removeCardName)) {
-                        Card cardReturnedToCollection = Collection.findCardInCollection(collection, removeCardName);
+                        CardModel cardReturnedToCollection = CollectionModel.findCardInCollection(collection, removeCardName);
                         if (cardReturnedToCollection != null) {
                             cardReturnedToCollection.setAmount(cardReturnedToCollection.getAmount() + 1);
                             System.out.println("Card \"" + removeCardName + "\" returned to main collection.");
