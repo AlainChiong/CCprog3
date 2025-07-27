@@ -12,7 +12,7 @@ import java.util.Scanner;
  * This class provides functionality for managing cards within a deck,
  * as well as a static method for overall deck management (creation, deletion, modification).
  */
-public class Deck {
+public class DeckModel {
     /**
      * The name of the deck.
      */
@@ -36,7 +36,7 @@ public class Deck {
      *
      * @param name The name of the deck.
      */
-    public Deck(String name) {
+    public DeckModel(String name) {
         this.name = name;
         this.cards = new ArrayList<>();
         this.typeName = "Normal Deck";
@@ -158,7 +158,7 @@ public class Deck {
      * @param decks      An `ArrayList` representing the list of all decks being managed.
      * @param collection The main Collection of cards from which cards can be added to decks.
      */
-    public static void manageDecks(Scanner scanner, ArrayList<Deck> decks, CollectionModel collection) {
+    public static void manageDecks(Scanner scanner, ArrayList<DeckModel> decks, CollectionModel collection) {
         while (true) {
             System.out.println("\n=== Deck Menu ===");
             System.out.println("1 - Create New Deck");
@@ -187,11 +187,11 @@ public class Deck {
                     char Choice = scanner.nextLine().trim().charAt(0);
                     switch (Choice){
                         case '1':
-                            decks.add(new Deck(deckName));
+                            decks.add(new DeckModel(deckName));
                             System.out.println("Deck \"" + deckName + "\" created.");
                             break;
                         case '2':
-                            decks.add(new SellableDeck(deckName));
+                            decks.add(new SellableDeckModel(deckName));
                             System.out.println("Sellable Deck \"" + deckName + "\" created.");
                             break;
                         default:
@@ -202,7 +202,7 @@ public class Deck {
                 case '2':
                     System.out.print("Enter deck name to delete: ");
                     String dDeck = scanner.nextLine();
-                    Deck tDelete = findDeck(decks, dDeck);
+                    DeckModel tDelete = findDeck(decks, dDeck);
                     if (tDelete != null) {
                         decks.remove(tDelete);
                         System.out.println("Deck \"" + dDeck + "\" deleted.");
@@ -216,14 +216,14 @@ public class Deck {
                         break;
                     }
                     // Loop through and view each deck's contents
-                    for (Deck d : decks) {
+                    for (DeckModel d : decks) {
                         d.viewDeck();
                     }
                     break;
                 case '4':
                     System.out.print("Enter deck name to add card to: ");
                     String targetDeckName = scanner.nextLine();
-                    Deck deck = findDeck(decks, targetDeckName);
+                    DeckModel deck = findDeck(decks, targetDeckName);
                     if (deck == null) {
                         System.out.println("Deck not found.");
                         break;
@@ -248,7 +248,7 @@ public class Deck {
                 case '5':
                     System.out.print("Enter deck name to remove card from: ");
                     String dName = scanner.nextLine();
-                    Deck d = findDeck(decks, dName);
+                    DeckModel d = findDeck(decks, dName);
                     if (d == null) {
                         System.out.println("Deck not found.");
                         break;
@@ -272,18 +272,18 @@ public class Deck {
                         break;
                     }
                     System.out.println("\n=== Available Decks ===");
-                    for (Deck dek : decks) {
+                    for (DeckModel dek : decks) {
                         System.out.println("- " + dek.getName());
                     }
                     System.out.print("Enter the name of the deck to sell: ");
                     String sName = scanner.nextLine();
-                    Deck sDeck = findDeck(decks, sName);
+                    DeckModel sDeck = findDeck(decks, sName);
                     if (sDeck == null) {
                         System.out.println("Deck not found.");
                         break;
                     }
-                    if (sDeck instanceof SellableDeck) {
-                        ((SellableDeck) sDeck).SellDeck(decks);
+                    if (sDeck instanceof SellableDeckModel) {
+                        ((SellableDeckModel) sDeck).SellDeck(decks);
                     } else {
                         System.out.println("This deck is not sellable.");
                     }
@@ -297,15 +297,15 @@ public class Deck {
     }
 
     /**
-     * Static helper method to find a {@link Deck} within a list of decks by its name.
+     * Static helper method to find a {@link DeckModel} within a list of decks by its name.
      * The search is case-insensitive.
      *
-     * @param decks An `ArrayList` of {@link Deck} objects to search through.
+     * @param decks An `ArrayList` of {@link DeckModel} objects to search through.
      * @param name  The name of the deck to find.
-     * @return The {@link Deck} object if found, otherwise `null`.
+     * @return The {@link DeckModel} object if found, otherwise `null`.
      */
-    public static Deck findDeck(ArrayList<Deck> decks, String name) {
-        for (Deck d : decks) {
+    public static DeckModel findDeck(ArrayList<DeckModel> decks, String name) {
+        for (DeckModel d : decks) {
             if (d.getName().equalsIgnoreCase(name)){
                 return d;
             }

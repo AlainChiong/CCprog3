@@ -12,13 +12,23 @@ import java.awt.*;
  * only for its selection state.
  */
 public class CardView extends JPanel {
-
+    /*
+     * 
+     */
     private static final Dimension CARD_SIZE = new Dimension(180, 250);
 
     // Borders for different states
+    /*
+     * 
+     */
     private final Border defaultBorder;
+    /*
+     * 
+     */
     private final Border selectedBorder;
-
+    /*
+     * 
+     */
     private boolean isSelected = false; 
 
     /**

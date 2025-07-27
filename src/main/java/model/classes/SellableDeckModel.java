@@ -2,16 +2,23 @@ package main.java.model.classes;
 
 import java.util.ArrayList;
 
-public class SellableDeck extends Deck {
+/*
+ * 
+ */
+public class SellableDeckModel extends DeckModel {
     
-
-    public SellableDeck(String name){
+    /*
+     * 
+     */
+    public SellableDeckModel(String name){
         super(name);
         this.typeName = "Sellable Deck";
         this.type = "Sell";
     }
-
-    public void SellDeck(ArrayList<Deck> decks){
+    /*
+     * 
+     */
+    public void SellDeck(ArrayList<DeckModel> decks){
 
         double dValue = 0.0;
 

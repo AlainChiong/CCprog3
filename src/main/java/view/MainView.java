@@ -14,21 +14,56 @@ import javax.swing.SwingConstants;
 
 import main.java.controller.*;
 
+    /*
+     * 
+     */
 public class MainView extends JFrame {
 
+    /*
+     * 
+     */
     private final String mainMenuViewString = "MainMenuView";
+    /*
+     * 
+     */
     private final String manageBindersViewString = "ManageBindersView";
+    /*
+     * 
+     */
     private final String manageDecksViewString = "ManageDecksView";
+    /*
+     * 
+     */
     private final String manageCollectionViewString = "ManageCollectionViews";
-
+    /*
+     * 
+     */
     private MainMenuView mainMenuView;
+    /*
+     * 
+     */
     private ManageBindersView manageBindersView;
+    /*
+     * 
+     */
     private ManageDecksView manageDecksView;
+    /*
+     * 
+     */
     private ManageCollectionView manageCollectionView;
 
+    /*
+     * 
+     */
     private JPanel cardPanelContainer;
+    /*
+     * 
+     */
     private CardLayout cardLayout;
 
+    /*
+     * 
+     */
     private JLabel moneyLabel;
 
     public MainView(String title) {
@@ -67,48 +102,82 @@ public class MainView extends JFrame {
         add(statusBar, BorderLayout.SOUTH);
     }
 
+    /*
+     * 
+     */
     public String getMainMenuViewString() {
         return mainMenuViewString;
     }
 
+    /*
+     * 
+     */
     public String getManageBindersViewString() {
         return manageBindersViewString;
     }
 
+    /*
+     * 
+     */
     public String getManageDecksViewString() {
         return manageDecksViewString;
     }
 
+    /*
+     * 
+     */
     public String getManageCollectionViewString() {
         return manageCollectionViewString;
     }
 
+    /*
+     * 
+     */
     public MainMenuView getMainMenuView() {
         return mainMenuView;
     }
 
+    /*
+     * 
+     */
     public ManageBindersView getManageBindersView() {
         return manageBindersView;
     }
 
+    /*
+     * 
+     */
     public ManageDecksView getManageDecksView() {
         return manageDecksView;
     }
 
+    /*
+     * 
+     */
     public ManageCollectionView getManageCollectionView() {
         return manageCollectionView;
     }
 
+    /*
+     * 
+     */
     public void showPanel(String panelName) {
         cardLayout.show(cardPanelContainer, panelName);
         cardPanelContainer.requestFocusInWindow();
     }
+
     // --- Utility methods for displaying dialogs ---
 
+    /*
+     * 
+     */
     public void showMessageDialog(String message, String title, int messageType) {
         JOptionPane.showMessageDialog(this, message, title, messageType);
     }
 
+    /*
+     * 
+     */
     public int showConfirmDialog(String message, String title, int optionType, int messageType) {
         return JOptionPane.showConfirmDialog(this, message, title, optionType, messageType);
     }

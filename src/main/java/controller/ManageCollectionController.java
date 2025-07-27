@@ -1,7 +1,9 @@
-// File: src/main/java/controller/ManageCollectionController.java
 package main.java.controller;
 
-import javax.swing.JOptionPane; 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import java.awt.Label;
 import java.awt.event.ActionEvent; 
 import java.awt.event.ActionListener;
 
@@ -24,14 +26,23 @@ import main.java.view.AddCardView;
  */
 public class ManageCollectionController {
 
-    private final MainModel mainModel; 
-    private final MainView mainView; 
+    /*
+     * Reference to the MainModel
+     */
+    private final MainModel mainModel;
+    /*
+     * Reference to the MainView
+     */
+    private final MainView mainView;
+    /*
+     * Reference to the ManageCollectionView, the view that this controller is responsible of.
+     */
     private final ManageCollectionView manageCollectionView; 
 
     /**
      * Constructor for ManageCollectionController.
      * @param mainModel The main application model.
-     * @param mainView The main application view (JFrame), used for showing dialogs and switching panels.
+     * @param mainView The main application view (JFrame).
      */
     public ManageCollectionController(MainModel mainModel, MainView mainView) {
         this.mainModel = mainModel;
@@ -70,6 +81,14 @@ public class ManageCollectionController {
             }
         });
 
+        //Listener for the "Sell Card" button
+        manageCollectionView.setSellCardButtonActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sellCardButtonPressed();
+            }
+        });
+
         // The "Back to Main Menu" button listener is handled directly in MainView's constructor,
         // which calls MainController.showMainMenu(). This keeps navigation centralized at MainController.
     }
@@ -101,7 +120,7 @@ public class ManageCollectionController {
      * Prompts the user for card details and adds the card to the collection.
      */
     private void addCardButtonPressed() {
-        System.out.println("Add Card Button Pressed");
+        System.out.println("ManageCollectionController: 'Add Card' action received.");
 
         AddCardView addCardView = new AddCardView();
 
@@ -156,7 +175,15 @@ public class ManageCollectionController {
      * Prompts the user for an amount change for the selected card.
      */
     private void modifyCardCountButtonPressed() {
-      
+        System.out.println("ManageCollectionController: 'Modify Card Count' action received.");
+        // Get the currently selected CardModel from the ManageCollectionView
+        CardModel selectedCard = manageCollectionView.getSelectedCard();
+        if (selectedCard == null) {
+            JOptionPane.showMessageDialog(manageCollectionView, "Please select a card to modify amount.", "No Card Selected", JOptionPane.WARNING_MESSAGE);
+        }
+        else {
+            //TODO
+        }
     }
 
     /**
@@ -169,23 +196,40 @@ public class ManageCollectionController {
         CardModel selectedCard = manageCollectionView.getSelectedCard();
         if (selectedCard == null) {
             JOptionPane.showMessageDialog(manageCollectionView, "Please select a card to view details.", "No Card Selected", JOptionPane.WARNING_MESSAGE);
-            return;
         }
+        else {
+            // Format the card details for display
+            String details = String.format(
+                "=== Card Details ===\n" +
+                "Name    : %s\n" +
+                "Rarity  : %s\n" +
+                "Variant : %s\n" +
+                "Value   : $%.2f\n" +
+                "Amount  : %.0f",
+                selectedCard.getName(),
+                selectedCard.getRarity(),
+                selectedCard.getVariant(),
+                selectedCard.getValue(),
+                selectedCard.getAmount()
+            );
+            JOptionPane.showMessageDialog(manageCollectionView, details, "Card Details", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 
-        // Format the card details for display
-        String details = String.format(
-            "=== Card Details ===\n" +
-            "Name    : %s\n" +
-            "Rarity  : %s\n" +
-            "Variant : %s\n" +
-            "Value   : $%.2f\n" +
-            "Amount  : %.0f",
-            selectedCard.getName(),
-            selectedCard.getRarity(),
-            selectedCard.getVariant(),
-            selectedCard.getValue(),
-            selectedCard.getAmount()
-        );
-        JOptionPane.showMessageDialog(manageCollectionView, details, "Card Details", JOptionPane.INFORMATION_MESSAGE);
+    private void sellCardButtonPressed() {
+        System.out.println("ManageCollectionController: 'Sell Card' action received.");
+        CardModel selectedCard = manageCollectionView.getSelectedCard();
+        if (selectedCard == null) {
+            JOptionPane.showMessageDialog(manageCollectionView, "Please select a card to sell.", "No Card Selected", JOptionPane.WARNING_MESSAGE);
+        }
+        else {
+            int result = JOptionPane.showConfirmDialog(
+                manageCollectionView,
+                new Label("Are you Sure You Want To Sell This Card?"),
+                "Sell Card",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+            );
+        }
     }
 }

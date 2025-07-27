@@ -13,11 +13,26 @@ import javax.swing.JPanel;
 
 import main.java.utilities.ViewUtilities;
 
+    /*
+     * 
+     */
 public class MainMenuView extends JPanel {
     //Main Menu Buttons
+    /*
+     * 
+     */
     private JButton manageBindersButton;
+    /*
+     * 
+     */
     private JButton manageDecksButton;
+    /*
+     * 
+     */
     private JButton manageCollectionButton;
+    /*
+     * 
+     */
     private JButton quitButton;
 
     public MainMenuView() {

@@ -3,8 +3,13 @@ package main.java.model;
 import main.java.model.classes.CollectionModel;
 
 public class MainModel {
-
+    /*
+     * 
+     */
     private CollectionModel collectionModel;
+    /*
+     * 
+     */
     private double money;
 
     /**

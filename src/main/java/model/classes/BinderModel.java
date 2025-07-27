@@ -8,11 +8,11 @@ import java.util.Scanner;
 
 /**
  * The `Binder` class represents a physical or digital binder used to store a collection of {@link CardModel} objects.
- * A binder has a name and a fixed capacity (maximum of 20 cards). Unlike a {@link Deck}, a binder
+ * A binder has a name and a fixed capacity (maximum of 20 cards). Unlike a {@link DeckModel}, a binder
  * does not enforce uniqueness of card names; multiple copies of the same card (by name) can be added,
  * but only up to the maximum capacity. It also provides functionality for trading cards with other binders.
  */
-public class Binder {
+public class BinderModel {
 
    /**
      * The name of the binder.
@@ -33,7 +33,7 @@ public class Binder {
      *
      * @param name The name of the binder.
      */
-    public Binder(String name) {
+    public BinderModel(String name) {
         this.name = name;
         this.cards = new ArrayList<>();
         this.typeName = "Non-curated Binder";
@@ -236,7 +236,7 @@ public class Binder {
      * @param collection The main {@link CollectionModel} of cards from which cards can be added to binders,
      * and to which cards are returned upon removal or moved during trades.
      */
-    public static void manageBinders(Scanner scanner, ArrayList<Binder> binders, CollectionModel collection) {
+    public static void manageBinders(Scanner scanner, ArrayList<BinderModel> binders, CollectionModel collection) {
         while (true) {
             System.out.println("\n=== Binder Menu ===");
             System.out.println("1 - Create New Binder");
@@ -266,7 +266,7 @@ public class Binder {
                     char Choice = scanner.nextLine().trim().charAt(0);
                     switch (Choice){
                         case '1':
-                            binders.add(new Binder(binderName));
+                            binders.add(new BinderModel(binderName));
                             System.out.println("Non-curated Binder \"" + binderName + "\" created.");
                             break;
                         case '2':
@@ -293,7 +293,7 @@ public class Binder {
                 case '2':
                     System.out.print("Enter binder name to delete: ");
                     String dBinder = scanner.nextLine();
-                    Binder tDelete = findBinder(binders, dBinder);
+                    BinderModel tDelete = findBinder(binders, dBinder);
                     if (tDelete != null) {
                         binders.remove(tDelete);
                         System.out.println("Binder \"" + dBinder + "\" deleted.");
@@ -306,7 +306,7 @@ public class Binder {
                         System.out.println("No binders yet.");
                         break;
                     }
-                    for (Binder b : binders) {
+                    for (BinderModel b : binders) {
                         System.out.println("- " + b.getName());
                         b.viewBinder();
                     }
@@ -318,7 +318,7 @@ public class Binder {
                     }
                     System.out.print("Enter binder name: ");
                     String targetBinder = scanner.nextLine();
-                    Binder binder = findBinder(binders, targetBinder);
+                    BinderModel binder = findBinder(binders, targetBinder);
                     if (binder == null) {
                         System.out.println("Binder not found.");
                         break;
@@ -337,7 +337,7 @@ public class Binder {
                 case '5':
                     System.out.print("Enter binder name: ");
                     String bName = scanner.nextLine();
-                    Binder b = findBinder(binders, bName);
+                    BinderModel b = findBinder(binders, bName);
                     if (b == null) {
                         System.out.println("Binder not found.");
                         break;
@@ -355,7 +355,7 @@ public class Binder {
                 case '6':
                     System.out.print("Enter your binder name (trading from): ");
                     String fName = scanner.nextLine();
-                    Binder fBinder = findBinder(binders, fName);
+                    BinderModel fBinder = findBinder(binders, fName);
 
                     if (fBinder == null) {
                         System.out.println("Binder not found.");
@@ -374,15 +374,15 @@ public class Binder {
     }
 
     /**
-     * Static helper method to find a {@link Binder} within a list of binders by its name.
+     * Static helper method to find a {@link BinderModel} within a list of binders by its name.
      * The search is case-insensitive.
      *
-     * @param binders An `ArrayList` of {@link Binder} objects to search through.
+     * @param binders An `ArrayList` of {@link BinderModel} objects to search through.
      * @param name    The name of the binder to find.
-     * @return The {@link Binder} object if found, otherwise `null`.
+     * @return The {@link BinderModel} object if found, otherwise `null`.
      */
-    public static Binder findBinder(ArrayList<Binder> binders, String name) {
-        for (Binder b : binders) {
+    public static BinderModel findBinder(ArrayList<BinderModel> binders, String name) {
+        for (BinderModel b : binders) {
             if (b.getName().equalsIgnoreCase(name)) return b;
         }
         return null;

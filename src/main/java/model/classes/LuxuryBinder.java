@@ -1,6 +1,6 @@
 package main.java.model.classes;
 
-public class LuxuryBinder extends Binder{
+public class LuxuryBinder extends BinderModel{
     
     public LuxuryBinder(String name){
         super(name);

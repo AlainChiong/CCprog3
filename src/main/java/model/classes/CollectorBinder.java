@@ -1,6 +1,6 @@
 package main.java.model.classes;
 
-public class CollectorBinder extends Binder{
+public class CollectorBinder extends BinderModel{
     
     public CollectorBinder(String name){
         super(name);

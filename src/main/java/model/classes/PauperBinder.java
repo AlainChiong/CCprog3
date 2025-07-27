@@ -1,6 +1,6 @@
 package main.java.model.classes;
 
-public class PauperBinder extends Binder{
+public class PauperBinder extends BinderModel{
     
     public PauperBinder(String name){
         super(name);

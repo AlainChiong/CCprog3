@@ -9,13 +9,20 @@ import main.java.model.MainModel;
 import main.java.view.MainView;
 
 public class MainController {
+    /*
+     * Reference to the MainView
+     */
     private final MainView mainView;
 
+    /*
+     * Reference to the MainModel
+     */
     private final MainModel mainModel;
     private ManageCollectionController manageCollectionController;
 
-
-
+    /*
+     * Constructor
+     */
     public MainController() {
         this.mainView = new MainView("Trading Card Inventory System");
         this.mainModel = new MainModel();

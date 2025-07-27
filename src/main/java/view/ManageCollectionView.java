@@ -21,21 +21,50 @@ import main.java.controller.CardController;
 import main.java.model.classes.CardModel;
 import main.java.utilities.ViewUtilities;
 
+    /*
+     * 
+     */
 public class ManageCollectionView extends JPanel {
 
     // Action Buttons
+    /*
+     * 
+     */
     private JButton addCardButton;
-    private JButton modifyCardCountButton; 
-    private JButton viewCardDetailsButton; 
-    private JButton sellCardButton;      
+    /*
+     * 
+     */
+    private JButton modifyCardCountButton;
+    /*
+     * 
+     */
+    private JButton viewCardDetailsButton;
+    /*
+     * 
+     */
+    private JButton sellCardButton;
+    /*
+     * 
+     */
     private JButton backButton;
 
     // Panel to display the cards
+    /*
+     * 
+     */
     private JPanel cardsContainerPanel;
+    /*
+     * 
+     */
     private List<CardController> cardControllers;
+    /*
+     * 
+     */
     private CardModel currentSelectedCardModel = null;
 
-    
+    /*
+     * 
+     */
     public ManageCollectionView() {
         this.cardControllers = new ArrayList<>();
 
@@ -106,23 +135,37 @@ public class ManageCollectionView extends JPanel {
         add(scrollPane, BorderLayout.CENTER); // Add scroll pane to the Center
     }
 
-
+    /*
+     * 
+     */
     public void setAddCardButtonActionListener(ActionListener listener) {
         addCardButton.addActionListener(listener);
     }
 
+    /*
+     * 
+     */
     public void setModifyCardCountButtonActionListener(ActionListener listener) {
         modifyCardCountButton.addActionListener(listener);
     }
 
+    /*
+     * 
+     */
     public void setViewCardDetailsButtonActionListener(ActionListener listener) {
         viewCardDetailsButton.addActionListener(listener);
     }
 
+    /*
+     * 
+     */
     public void setSellCardButtonActionListener(ActionListener listener) { 
         sellCardButton.addActionListener(listener);
     }
 
+    /*
+     * 
+     */
     public void setBackButtonActionListener(ActionListener listener) { 
         backButton.addActionListener(listener);
     }
