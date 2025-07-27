@@ -24,6 +24,8 @@ public class Binder {
      */
     protected ArrayList<CardModel> cards;
 
+    protected String typeName;
+
     protected String type;
 
     /**
@@ -31,9 +33,11 @@ public class Binder {
      *
      * @param name The name of the binder.
      */
-    public Binder(String name) {
+    public Binder(String name, String typeName, String type) {
         this.name = name;
         this.cards = new ArrayList<>();
+        this.typeName = typeName;
+        this.type = type;
     }
 
     /**

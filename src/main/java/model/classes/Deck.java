@@ -23,6 +23,8 @@ public class Deck {
      */
     protected ArrayList<CardModel> cards;
 
+    protected String typeName;
+
     protected String type;
 
     /**
@@ -33,6 +35,8 @@ public class Deck {
     public Deck(String name) {
         this.name = name;
         this.cards = new ArrayList<>();
+        this.typeName = "Normal Deck";
+        this.type = "normal";
     }
 
     /**
@@ -43,6 +47,14 @@ public class Deck {
     public String getName() {
         return name;
     }
+
+    public String getTypeName() {
+        return this.typeName;
+    }
+
+    public String getType() {
+        return this.type;
+    }   
 
     /**
      * Returns the `ArrayList` containing all {@link CardModel} objects in this deck.
@@ -150,7 +162,8 @@ public class Deck {
             System.out.println("3 - View Decks");
             System.out.println("4 - Add Card to Deck");
             System.out.println("5 - Remove Card from Deck");
-            System.out.println("6 - Go Back");
+            System.out.println("6 - Sell Deck");
+            System.out.println("7 - Go Back");
             System.out.print("Enter choice: ");
 
             String input = scanner.nextLine();
@@ -164,8 +177,23 @@ public class Deck {
                 case '1':
                     System.out.print("Enter deck name: ");
                     String deckName = scanner.nextLine();
-                    decks.add(new Deck(deckName));
-                    System.out.println("Deck \"" + deckName + "\" created.");
+                    System.out.println("Select deck type:");
+                    System.out.println("1. Normal Deck");
+                    System.out.println("2. Sellable Deck");
+                    char Choice = scanner.nextLine().trim().charAt(0);
+                    switch (Choice){
+                        case '1':
+                            decks.add(new Deck(deckName));
+                            System.out.println("Deck \"" + deckName + "\" created.");
+                            break;
+                        case '2':
+                            decks.add(new SellableDeck(deckName));
+                            System.out.println("Sellable Deck \"" + deckName + "\" created.");
+                            break;
+                        default:
+                           System.out.println("Invalid deck type. Deck creation cancelled.");
+                            break; 
+                    }
                     break;
                 case '2':
                     System.out.print("Enter deck name to delete: ");
@@ -235,6 +263,28 @@ public class Deck {
                     }
                     break;
                 case '6':
+                    if (decks.isEmpty()) {
+                        System.out.println("No decks available to sell.");
+                        break;
+                    }
+                    System.out.println("\n=== Available Decks ===");
+                    for (Deck dek : decks) {
+                        System.out.println("- " + dek.getName());
+                    }
+                    System.out.print("Enter the name of the deck to sell: ");
+                    String sName = scanner.nextLine();
+                    Deck sDeck = findDeck(decks, sName);
+                    if (sDeck == null) {
+                        System.out.println("Deck not found.");
+                        break;
+                    }
+                    if (sDeck instanceof SellableDeck) {
+                        ((SellableDeck) sDeck).SellDeck(decks);
+                    } else {
+                        System.out.println("This deck is not sellable.");
+                    }
+                    break;
+                case '7':
                     return; // Exit the Deck Management menu
                 default:
                     System.out.println("Invalid input. Please enter a number from 1 to 6.");
