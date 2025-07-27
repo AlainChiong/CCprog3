@@ -33,11 +33,11 @@ public class Binder {
      *
      * @param name The name of the binder.
      */
-    public Binder(String name, String typeName, String type) {
+    public Binder(String name) {
         this.name = name;
         this.cards = new ArrayList<>();
-        this.typeName = typeName;
-        this.type = type;
+        this.typeName = "Non-curated Binder";
+        this.type = "trade";
     }
 
     /**
@@ -57,6 +57,14 @@ public class Binder {
     public ArrayList<CardModel> getCards() {
         return cards;
     }
+
+    public String getTypeName() {
+        return this.typeName;
+    }
+
+    public String getType() {
+        return this.type;
+    } 
 
     /**
      * Calculates and returns the total number of physical cards in the binder.
@@ -249,8 +257,38 @@ public class Binder {
                 case '1':
                     System.out.print("Enter binder name: ");
                     String binderName = scanner.nextLine();
-                    binders.add(new Binder(binderName));
-                    System.out.println("Binder created.");
+                    System.out.println("Select deck type:");
+                    System.out.println("1. Non-curated Binder");
+                    System.out.println("2. Pauper Binder");
+                    System.out.println("3. Rares Binder");
+                    System.out.println("4. Luxury Binder");
+                    System.out.println("5. Collector Binder");
+                    char Choice = scanner.nextLine().trim().charAt(0);
+                    switch (Choice){
+                        case '1':
+                            binders.add(new Binder(binderName));
+                            System.out.println("Non-curated Binder \"" + binderName + "\" created.");
+                            break;
+                        case '2':
+                            binders.add(new PauperBinder(binderName));
+                            System.out.println("Pauper \"" + binderName + "\" created.");
+                            break;
+                        case '3':
+                            binders.add(new RaresBinder(binderName));
+                            System.out.println("Rares \"" + binderName + "\" created.");
+                            break;
+                        case '4':
+                            binders.add(new LuxuryBinder(binderName));
+                            System.out.println("Luxury \"" + binderName + "\" created.");
+                            break;
+                        case '5':
+                            binders.add(new CollectorBinder(binderName));
+                            System.out.println("Collector \"" + binderName + "\" created.");
+                            break;
+                        default:
+                           System.out.println("Invalid binder type. binder creation cancelled.");
+                            break; 
+                    }
                     break;
                 case '2':
                     System.out.print("Enter binder name to delete: ");
