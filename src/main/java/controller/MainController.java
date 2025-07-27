@@ -26,6 +26,8 @@ public class MainController {
         );
 
         setupAllViewListeners();
+
+        mainView.updatePlayerMoneyDisplay(mainModel.getMoney());
     }
 
     private void setupAllViewListeners() {

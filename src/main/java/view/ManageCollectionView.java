@@ -35,7 +35,7 @@ public class ManageCollectionView extends JPanel {
     private List<CardController> cardControllers;
     private CardModel currentSelectedCardModel = null;
 
-
+    
     public ManageCollectionView() {
         this.cardControllers = new ArrayList<>();
 

@@ -22,9 +22,13 @@ public class Deck {
      * Each card in the deck is considered a unique instance (only one copy per card name).
      */
     protected ArrayList<CardModel> cards;
-
+   /**
+     * The name of the deck.
+     */
     protected String typeName;
-
+   /**
+     * The name of the deck.
+     */
     protected String type;
 
     /**

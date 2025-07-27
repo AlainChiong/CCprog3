@@ -1,9 +1,16 @@
 package main.java.view;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import main.java.controller.*;
 
@@ -22,6 +29,7 @@ public class MainView extends JFrame {
     private JPanel cardPanelContainer;
     private CardLayout cardLayout;
 
+    private JLabel moneyLabel;
 
     public MainView(String title) {
         super(title);
@@ -45,6 +53,18 @@ public class MainView extends JFrame {
         cardPanelContainer.add(manageBindersView, manageBindersViewString);
         cardPanelContainer.add(manageDecksView, manageDecksViewString);
         cardPanelContainer.add(manageCollectionView, manageCollectionViewString);
+
+        moneyLabel = new JLabel("Money: $0.00", SwingConstants.RIGHT);
+        moneyLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        moneyLabel.setForeground(Color.GREEN);
+        moneyLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
+
+        JPanel statusBar = new JPanel(new BorderLayout()); 
+        statusBar.setBackground(new Color(30, 30, 50));
+        statusBar.add(moneyLabel, BorderLayout.EAST);
+
+        add(cardPanelContainer, BorderLayout.CENTER);
+        add(statusBar, BorderLayout.SOUTH);
     }
 
     public String getMainMenuViewString() {
@@ -91,5 +111,13 @@ public class MainView extends JFrame {
 
     public int showConfirmDialog(String message, String title, int optionType, int messageType) {
         return JOptionPane.showConfirmDialog(this, message, title, optionType, messageType);
+    }
+
+    /**
+     * Updates the displayed player money amount.
+     * @param currentMoney The new money amount to display.
+     */
+    public void updatePlayerMoneyDisplay(double currentMoney) {
+        moneyLabel.setText("Money: " + String.format("$%.2f", currentMoney));
     }
 }
