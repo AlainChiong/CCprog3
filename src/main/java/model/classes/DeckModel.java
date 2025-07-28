@@ -124,7 +124,7 @@ public class DeckModel {
             System.out.println("Deck is empty.");
             return;
         }
-        System.out.println("=== " + name + "'s Deck ===");
+        System.out.println("=== " + name + "'s "+ typeName +"===");
         // Sort cards by name before displaying
         Collections.sort(cards, Comparator.comparing(CardModel::getName));
         for (CardModel card : cards) {

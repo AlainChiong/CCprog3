@@ -332,7 +332,7 @@ public class BinderModel {
                         break;
                     }
                     for (BinderModel b : binders) {
-                        System.out.println("- " + b.getName());
+                        System.out.println("- " + b.getName() + ": " + b.getTypeName());
                         b.viewBinder();
                     }
                     break;
