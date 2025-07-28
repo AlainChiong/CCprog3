@@ -282,11 +282,13 @@ public class DeckModel {
                         System.out.println("Deck not found.");
                         break;
                     }
-                    if (sDeck instanceof SellableDeckModel) {
-                        ((SellableDeckModel) sDeck).SellDeck(decks);
-                    } else {
-                        System.out.println("This deck is not sellable.");
+                    if (!sDeck.getType().equals("sell")) {
+                        System.out.println("This is not a Sellable Deck.");
+                        break;
                     }
+                    ((SellableDeckModel) sDeck).sellDeck(collection);
+                    decks.remove(sDeck);
+                    System.out.println("Sellable Deck \"" + sDeck.getName() + "\" has been removed after selling all cards.");
                     break;
                 case '7':
                     return; // Exit the Deck Management menu

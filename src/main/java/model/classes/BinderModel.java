@@ -208,7 +208,7 @@ public class BinderModel {
                 return;
             }
         }
-        this.removeCard(myCard.getName());
+        this.removeCard(myCard.getName()); 
         boolean stillInBinder = false;
         for (CardModel c : this.cards) {
             if (c.getName().equalsIgnoreCase(myCard.getName())) {
@@ -224,6 +224,30 @@ public class BinderModel {
         newCardC.setAmount(newCardC.getAmount()-1);
         this.addCardB(newCardC);
     }
+
+    public void sellBinder(CollectionModel collection) {
+        if (cards.isEmpty()) {
+            System.out.println("Sell Binder is empty. Nothing to sell.");
+            return;
+        }
+
+        double bValue = 0.0;
+        ArrayList<CardModel> cardsCopy = new ArrayList<>(cards); // avoid concurrent modification
+
+        for (CardModel binderCard : cardsCopy) {
+            int amount = binderCard.getAmount();
+            bValue += binderCard.getValue() * amount;
+
+            // Remove from binder one by one
+            for (int i = 0; i < amount; i++) {
+                this.removeCard(binderCard.getName());
+                collection.removeCardByName(binderCard.getName());
+            }
+        }
+
+        System.out.printf("All cards sold from binder \"%s\". Total value: $%.2f%n", this.getName(), bValue);
+    }
+
 
     /**
      * Provides a static menu-driven interface for managing a list of `Binder` objects.
@@ -245,7 +269,8 @@ public class BinderModel {
             System.out.println("4 - Add Card to Binder");
             System.out.println("5 - Remove Card from Binder");
             System.out.println("6 - Trade Cards");
-            System.out.println("7 - Go Back");
+            System.out.println("7 - Sell Binder");
+            System.out.println("8 - Go Back");
             System.out.print("Enter choice: ");
 
             String input = scanner.nextLine();
@@ -361,11 +386,35 @@ public class BinderModel {
                         System.out.println("Binder not found.");
                         break;
                     }
+
+                    if (!fBinder.getType().equals("trade")) {
+                        System.out.println("This binder is not a Trade Binder.");
+                        break;
+                    }
                     
                     fBinder.tradeWith(scanner, collection);
                     scanner.nextLine();
                     break;
                 case '7':
+                    System.out.print("Enter your binder name (to sell): ");
+                    String fName = scanner.nextLine();
+                    BinderModel fBinder = findBinder(binders, fName);
+
+                    if (fBinder == null) {
+                        System.out.println("Binder not found.");
+                        break;
+                    }
+
+                    if (!fBinder.getType().equals("sell")) {
+                        System.out.println("This is not a Sell Binder.");
+                        break;
+                    }
+                    
+                    fBinder.sellBinder(collection);
+                    binders.remove(fBinder);
+                    System.out.println("Sell Binder \"" + fBinder.getName() + "\" has been removed after selling all cards.");
+                    break;
+                case '8':
                     return;
                 default:
                     System.out.println("Invalid input.");

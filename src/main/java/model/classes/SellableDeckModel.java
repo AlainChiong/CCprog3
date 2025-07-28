@@ -13,23 +13,27 @@ public class SellableDeckModel extends DeckModel {
     public SellableDeckModel(String name){
         super(name);
         this.typeName = "Sellable Deck";
-        this.type = "Sell";
+        this.type = "sell";
     }
     /*
      * 
      */
-    public void SellDeck(ArrayList<DeckModel> decks){
+    public void SellDeck(CollectionModel collection){
 
-        double dValue = 0.0;
-
-        for (CardModel card : this.getCards()) {
-            dValue += card.getValue();
+        if (cards.isEmpty()) {
+            System.out.println("Sellable deck is empty. Nothing to sell.");
+            return;
         }
 
-        this.getCards().clear();
+        double dValue = 0.0;
+        ArrayList<CardModel> cardsCopy = new ArrayList<>(cards);
 
-        decks.remove(this);
+        for (CardModel deckCard : cardsCopy) {
+            dValue += deckCard.getValue();
 
-        System.out.printf("Deck \"%s\" has been sold for $%.2f. All cards are now gone.\n", this.getName(), dValue);
+            this.removeCard(deckCard.getName());                 // remove from deck
+            collection.removeCardByName(deckCard.getName());
+        }
+        System.out.printf("All cards in deck \"%s\" sold. Total value: $%.2f%n", this.getName(), dValue);
     }
 }
