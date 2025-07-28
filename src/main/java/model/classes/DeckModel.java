@@ -286,7 +286,7 @@ public class DeckModel {
                         System.out.println("This is not a Sellable Deck.");
                         break;
                     }
-                    ((SellableDeckModel) sDeck).sellDeck(collection);
+                    ((SellableDeckModel) sDeck).SellDeck(collection);
                     decks.remove(sDeck);
                     System.out.println("Sellable Deck \"" + sDeck.getName() + "\" has been removed after selling all cards.");
                     break;

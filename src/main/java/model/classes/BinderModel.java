@@ -235,7 +235,7 @@ public class BinderModel {
         ArrayList<CardModel> cardsCopy = new ArrayList<>(cards); // avoid concurrent modification
 
         for (CardModel binderCard : cardsCopy) {
-            int amount = binderCard.getAmount();
+            double amount = binderCard.getAmount();
             bValue += binderCard.getValue() * amount;
 
             // Remove from binder one by one
@@ -397,22 +397,22 @@ public class BinderModel {
                     break;
                 case '7':
                     System.out.print("Enter your binder name (to sell): ");
-                    String fName = scanner.nextLine();
-                    BinderModel fBinder = findBinder(binders, fName);
+                    String sName = scanner.nextLine();
+                    BinderModel sBinder = findBinder(binders, sName);
 
-                    if (fBinder == null) {
+                    if (sBinder == null) {
                         System.out.println("Binder not found.");
                         break;
                     }
 
-                    if (!fBinder.getType().equals("sell")) {
+                    if (!sBinder.getType().equals("sell")) {
                         System.out.println("This is not a Sell Binder.");
                         break;
                     }
                     
-                    fBinder.sellBinder(collection);
-                    binders.remove(fBinder);
-                    System.out.println("Sell Binder \"" + fBinder.getName() + "\" has been removed after selling all cards.");
+                    sBinder.sellBinder(collection);
+                    binders.remove(sBinder);
+                    System.out.println("Sell Binder \"" + sBinder.getName() + "\" has been removed after selling all cards.");
                     break;
                 case '8':
                     return;
