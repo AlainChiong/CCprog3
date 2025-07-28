@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import main.java.controller.*;
+import main.java.view.collection_views.ManageCollectionView;
 
     /*
      * 

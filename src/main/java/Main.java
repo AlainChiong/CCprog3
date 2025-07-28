@@ -67,7 +67,7 @@ public class Main {
                     System.out.println("Goodbye!");
                     break;
                 default:
-                    System.out.println("Invalid input.");
+                    c
             }
         }
         scanner.close(); */

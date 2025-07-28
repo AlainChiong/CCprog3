@@ -53,6 +53,11 @@ public class AddCardView extends JPanel {
     }
 
     private void layoutComponents() {
+        JLabel nameLabel = new JLabel("Card Name:");
+        JLabel rarityLabel = new JLabel("Rarity:");
+        JLabel variantLabel = new JLabel("Variant:");
+        JLabel baseValueLabel = new JLabel("Base Value:");
+
         setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
@@ -63,7 +68,7 @@ public class AddCardView extends JPanel {
         // Card Name
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = row;
-        add(ViewUtilities.createStyledLabel("Card Name:"), gridBagConstraints);
+        add(nameLabel, gridBagConstraints);
         gridBagConstraints.gridx = 1;
         add(cardNameField, gridBagConstraints);
         row++;
@@ -71,7 +76,7 @@ public class AddCardView extends JPanel {
         // Rarity
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = row;
-        add(ViewUtilities.createStyledLabel("Rarity:"), gridBagConstraints);
+        add(rarityLabel, gridBagConstraints);
         gridBagConstraints.gridx = 1;
         add(rarityComboBox, gridBagConstraints);
         row++;
@@ -79,7 +84,7 @@ public class AddCardView extends JPanel {
         // Variant
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = row;
-        add(ViewUtilities.createStyledLabel("Variant:"), gridBagConstraints);
+        add(variantLabel, gridBagConstraints);
         gridBagConstraints.gridx = 1;
         add(variantComboBox, gridBagConstraints);
         row++;
@@ -87,7 +92,7 @@ public class AddCardView extends JPanel {
         // Base Value
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = row;
-        add(ViewUtilities.createStyledLabel("Base Value:"), gridBagConstraints);
+        add(baseValueLabel, gridBagConstraints);
         gridBagConstraints.gridx = 1;
         add(valueField, gridBagConstraints);
         row++;

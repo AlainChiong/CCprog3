@@ -1,7 +1,6 @@
 package main.java.controller;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import java.awt.Label;
 import java.awt.event.ActionEvent; 
@@ -14,9 +13,9 @@ import main.java.model.classes.CardModel;
 import main.java.model.enums.Rarity;
 import main.java.model.enums.Variant;
 
-import main.java.view.MainView; 
-import main.java.view.ManageCollectionView; 
-import main.java.view.AddCardView; 
+import main.java.view.MainView;
+import main.java.view.collection_views.AddCardView;
+import main.java.view.collection_views.ManageCollectionView; 
 
 /**
  * ManageCollectionController is a sub-controller responsible for managing all interactions

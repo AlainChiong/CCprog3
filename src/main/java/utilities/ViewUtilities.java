@@ -14,6 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
+
+/*
+ * A Utility Class For Styling Views
+ */
 public class ViewUtilities {
     /**
      * Applies default styling for main menu buttons.
@@ -54,17 +58,9 @@ public class ViewUtilities {
     }
 
     
-    public static JButton createStyledButton(String text) {
-        JButton button = new JButton(text);
-        
-        button.setFocusPainted(false); 
-        return button;
-    }
 
-    public static JLabel createStyledLabel(String text) {
-        JLabel label = new JLabel(text);
-        return label;
-    }
+
+
     public static void styleTextField(JTextField textField) {
 
     }

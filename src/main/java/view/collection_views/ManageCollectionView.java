@@ -1,4 +1,4 @@
-package main.java.view;
+package main.java.view.collection_views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 import main.java.controller.CardController;
 import main.java.model.classes.CardModel;
 import main.java.utilities.ViewUtilities;
+import main.java.view.CardView;
 
     /*
      * 
@@ -71,7 +72,7 @@ public class ManageCollectionView extends JPanel {
         setLayout(new BorderLayout(10, 10)); 
         setBackground(new Color(50, 50, 80)); 
 
-
+        //TODO put style in ViewUtilities
         JLabel titleLabel = new JLabel("Manage Collection", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 40));
         titleLabel.setForeground(Color.WHITE); 
