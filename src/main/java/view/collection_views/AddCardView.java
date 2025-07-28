@@ -1,5 +1,5 @@
 // File: src/main/java/view/AddCardView.java
-package main.java.view;
+package main.java.view.collection_views;
 
 import main.java.model.enums.Rarity;
 import main.java.model.enums.Variant;
@@ -54,42 +54,42 @@ public class AddCardView extends JPanel {
 
     private void layoutComponents() {
         setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         int row = 0;
 
         // Card Name
-        gbc.gridx = 0;
-        gbc.gridy = row;
-        add(ViewUtilities.createStyledLabel("Card Name:"), gbc);
-        gbc.gridx = 1;
-        add(cardNameField, gbc);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = row;
+        add(ViewUtilities.createStyledLabel("Card Name:"), gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        add(cardNameField, gridBagConstraints);
         row++;
 
         // Rarity
-        gbc.gridx = 0;
-        gbc.gridy = row;
-        add(ViewUtilities.createStyledLabel("Rarity:"), gbc);
-        gbc.gridx = 1;
-        add(rarityComboBox, gbc);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = row;
+        add(ViewUtilities.createStyledLabel("Rarity:"), gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        add(rarityComboBox, gridBagConstraints);
         row++;
 
         // Variant
-        gbc.gridx = 0;
-        gbc.gridy = row;
-        add(ViewUtilities.createStyledLabel("Variant:"), gbc);
-        gbc.gridx = 1;
-        add(variantComboBox, gbc);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = row;
+        add(ViewUtilities.createStyledLabel("Variant:"), gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        add(variantComboBox, gridBagConstraints);
         row++;
 
         // Base Value
-        gbc.gridx = 0;
-        gbc.gridy = row;
-        add(ViewUtilities.createStyledLabel("Base Value:"), gbc);
-        gbc.gridx = 1;
-        add(valueField, gbc);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = row;
+        add(ViewUtilities.createStyledLabel("Base Value:"), gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        add(valueField, gridBagConstraints);
         row++;
 
 
