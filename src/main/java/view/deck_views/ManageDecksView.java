@@ -128,6 +128,13 @@ public class ManageDecksView extends JPanel {
         decksContainerPanel.repaint();
     }
 
+    public void setEnableActionButtons(boolean enabled) {
+        deleteDeckButton.setEnabled(enabled);
+        addRemoveCardButton.setEnabled(enabled);
+        viewDeckButton.setEnabled(enabled);
+        sellDeckButton.setEnabled(enabled); // Will also be overridden by setSelectedDeck() if needed
+    }
+
     public void setSelectedDeck(DeckModel selectedDeck) {
         this.currentSelectedDeckModel = selectedDeck;
         for (DeckController controller : deckControllers) {
