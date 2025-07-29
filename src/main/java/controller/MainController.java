@@ -101,6 +101,7 @@ public class MainController {
     public void manageDecksButtonPressed() {
         System.out.println("Manage Deck Button Pressed");
         mainView.showPanel((mainView.getManageDecksViewString()));
+        manageDeckController.refreshDeckDisplay();
     }
     public void manageCollectionButtonPressed() {
         System.out.println("Manage Collection Button Pressed");
