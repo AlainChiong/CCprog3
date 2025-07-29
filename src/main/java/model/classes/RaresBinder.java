@@ -7,4 +7,13 @@ public class RaresBinder extends BinderModel{
         this.typeName = "Rares Binder";
         this.type = "sell";
     }
+
+    public boolean addCardB(CardModel card) {
+        String rarity = card.getRarity().toString();
+        if (!rarity.equalsIgnoreCase("Rare") && !rarity.equalsIgnoreCase("Legendary")) {
+            System.out.println("Only Rare or Legendary cards are allowed in a Rares Binder.");
+            return false;
+        }
+        return super.addCardB(card);
+    }
 }
