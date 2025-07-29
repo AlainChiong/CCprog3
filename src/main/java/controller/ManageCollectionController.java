@@ -117,6 +117,8 @@ public class ManageCollectionController {
                 manageCollectionView.setSelectedCard(clickedCard);
             }
         });
+        boolean isCollectionEmpty = currentCards.isEmpty();
+        manageCollectionView.setEnableActionButtons(!isCollectionEmpty);
     }
 
     // --- Action methods for ManageCollectionView buttons ---
@@ -201,7 +203,10 @@ public class ManageCollectionController {
             if (result == JOptionPane.OK_OPTION) {
                 System.out.println("ManageCollectionController: Card count value modified");
                 selectedCard.setAmount( selectedCard.getAmount() + modifyCardAmountView.getNewValue());
-
+                if (selectedCard.getAmount() <= 0) {
+                    mainModel.getCollectionModel().removeCard(selectedCard);
+                    JOptionPane.showMessageDialog(manageCollectionView, "Card removed from collection as amount reached 0.", "Card Removed", JOptionPane.INFORMATION_MESSAGE);
+                }
                 refreshCardDisplay();
             }
             else {

@@ -72,6 +72,11 @@ public class ManageCollectionView extends JPanel {
         setLayout(new BorderLayout(10, 10)); 
         setBackground(new Color(50, 50, 80)); 
 
+        layoutComponents();
+    }
+
+
+    public void layoutComponents() {
         //TODO put style in ViewUtilities
         JLabel titleLabel = new JLabel("Manage Collection", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 40));
@@ -134,6 +139,18 @@ public class ManageCollectionView extends JPanel {
         scrollPane.getViewport().setBackground(new Color(50, 50, 80));
 
         add(scrollPane, BorderLayout.CENTER); // Add scroll pane to the Center
+    }
+
+    /**
+     * Enables or disables the action buttons related to modifying, viewing, or selling cards.
+     * The "Add New Card" and "Back to Main Menu" buttons are always enabled regardless of collection state.
+     * @param enable true to enable the buttons, false to disable them.
+     */
+    public void setEnableActionButtons(boolean enable) {
+        modifyCardCountButton.setEnabled(enable);
+        viewCardDetailsButton.setEnabled(enable);
+        sellCardButton.setEnabled(enable);
+        // addCardButton and backButton are always enabled
     }
 
     /*
