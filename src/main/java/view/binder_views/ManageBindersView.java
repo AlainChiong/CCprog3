@@ -1,4 +1,4 @@
-package main.java.view;
+package main.java.view.binder_views;
 
 import javax.swing.JPanel;
     /*

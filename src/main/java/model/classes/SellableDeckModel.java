@@ -36,4 +36,9 @@ public class SellableDeckModel extends DeckModel {
         }
         System.out.printf("All cards in deck \"%s\" sold. Total value: $%.2f%n", this.getName(), dValue);
     }
+
+    @Override
+    public boolean isSellable() {
+        return true;
+    }
 }

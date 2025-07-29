@@ -22,6 +22,14 @@ public class MainController {
      * The subcontroller that manages the collection
      */
     private ManageCollectionController manageCollectionController;
+    /*
+     * The subcontroller that manages the collection
+     */
+    private ManageBinderController manageBinderController;
+    /*
+     * The subcontroller that manages the collection
+     */
+    private ManageDeckController manageDeckController;
 
     /*
      * Constructor

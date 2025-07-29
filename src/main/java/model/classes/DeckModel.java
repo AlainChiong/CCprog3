@@ -149,6 +149,18 @@ public class DeckModel {
         System.out.println("Card not found.");
     }
 
+    public double getTotalValue() {
+        double total = 0.0;
+        for (CardModel card : cards) {
+            total += card.getValue() * card.getAmount();
+        }
+        return total;
+    }
+
+    public boolean isSellable() {
+        return false;
+    }
+
     /**
      * Provides a static menu-driven interface for managing a list of `Deck` objects.
      * This method allows users to create, delete, view, add cards to, and remove cards from decks.
