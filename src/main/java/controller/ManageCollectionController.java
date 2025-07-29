@@ -15,7 +15,9 @@ import main.java.model.enums.Variant;
 
 import main.java.view.MainView;
 import main.java.view.collection_views.AddCardView;
-import main.java.view.collection_views.ManageCollectionView; 
+import main.java.view.collection_views.ManageCollectionView;
+import main.java.view.collection_views.ModifyCardAmountView;
+import main.java.view.collection_views.SellCardView; 
 
 /**
  * ManageCollectionController is a sub-controller responsible for managing all interactions
@@ -34,6 +36,10 @@ public class ManageCollectionController {
      */
     private final MainView mainView;
     /*
+     * Reference to the MainController
+     */
+    private final MainController mainController;
+    /*
      * Reference to the ManageCollectionView, the view that this controller is responsible of.
      */
     private final ManageCollectionView manageCollectionView; 
@@ -43,9 +49,10 @@ public class ManageCollectionController {
      * @param mainModel The main application model.
      * @param mainView The main application view (JFrame).
      */
-    public ManageCollectionController(MainModel mainModel, MainView mainView) {
+    public ManageCollectionController(MainModel mainModel, MainView mainView ,MainController mainController) {
         this.mainModel = mainModel;
         this.mainView = mainView;
+        this.mainController = mainController;
         this.manageCollectionView = mainView.getManageCollectionView();
 
         setupListeners();
@@ -181,7 +188,25 @@ public class ManageCollectionController {
             JOptionPane.showMessageDialog(manageCollectionView, "Please select a card to modify amount.", "No Card Selected", JOptionPane.WARNING_MESSAGE);
         }
         else {
-            //TODO
+            ModifyCardAmountView modifyCardAmountView = new ModifyCardAmountView(selectedCard.getAmount());
+
+            int result = JOptionPane.showConfirmDialog(
+                manageCollectionView,
+                modifyCardAmountView,
+                "Modify Card Count",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (result == JOptionPane.OK_OPTION) {
+                System.out.println("ManageCollectionController: Card count value modified");
+                selectedCard.setAmount( selectedCard.getAmount() + modifyCardAmountView.getNewValue());
+
+                refreshCardDisplay();
+            }
+            else {
+                System.out.println("ManageCollectionController: Modify card count cancelled");
+            }
         }
     }
 
@@ -217,18 +242,36 @@ public class ManageCollectionController {
 
     private void sellCardButtonPressed() {
         System.out.println("ManageCollectionController: 'Sell Card' action received.");
+
         CardModel selectedCard = manageCollectionView.getSelectedCard();
+
         if (selectedCard == null) {
             JOptionPane.showMessageDialog(manageCollectionView, "Please select a card to sell.", "No Card Selected", JOptionPane.WARNING_MESSAGE);
         }
         else {
+
+            SellCardView sellCardView = new SellCardView(selectedCard);
+
             int result = JOptionPane.showConfirmDialog(
                 manageCollectionView,
-                new Label("Are you Sure You Want To Sell This Card?"),
+                sellCardView,
                 "Sell Card",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE
             );
+
+            if (result == JOptionPane.OK_OPTION) {
+                mainController.setMoney(mainModel.getMoney() + selectedCard.getTotalPrice(sellCardView.getNewValue()));
+                selectedCard.setAmount(selectedCard.getAmount() - sellCardView.getNewValue());
+                if (selectedCard.getAmount() == 0) {
+                    mainModel.getCollectionModel().removeCard(selectedCard);
+                    refreshCardDisplay();
+                    System.out.println("ManageCollectionController: Card Removed.");
+                }
+            }
+            else {
+                System.out.println("ManageCollectionController: Sell Card Cancelled.");
+            }
         }
     }
 }

@@ -18,6 +18,9 @@ public class MainController {
      * Reference to the MainModel
      */
     private final MainModel mainModel;
+    /*
+     * The subcontroller that manages the collection
+     */
     private ManageCollectionController manageCollectionController;
 
     /*
@@ -29,7 +32,8 @@ public class MainController {
 
         this.manageCollectionController = new ManageCollectionController(
                 mainModel,
-                mainView
+                mainView,
+                this
         );
 
         setupAllViewListeners();
@@ -110,5 +114,10 @@ public class MainController {
 
     public void backButtonPressed() {
         mainView.showPanel(mainView.getMainMenuViewString());
+    }
+
+    public void setMoney(double money) {
+        mainModel.setMoney(money);
+        mainView.updatePlayerMoneyDisplay(money);
     }
 }

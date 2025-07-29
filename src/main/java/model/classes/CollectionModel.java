@@ -208,4 +208,11 @@ public class CollectionModel {
             }
         }
     }
+
+    /*
+     * Removes a card entirely from the collection
+     */
+    public void removeCard(CardModel cardModel) {
+        cards.remove(cardModel);
+    }
 }

@@ -31,7 +31,7 @@ public class SellableDeckModel extends DeckModel {
         for (CardModel deckCard : cardsCopy) {
             dValue += deckCard.getValue();
 
-            this.removeCard(deckCard.getName());                 // remove from deck
+            this.removeCard(deckCard.getName());
             collection.removeCardByName(deckCard.getName());
         }
         System.out.printf("All cards in deck \"%s\" sold. Total value: $%.2f%n", this.getName(), dValue);

@@ -259,4 +259,7 @@ public class CardModel {
         return this.amount;
     }
     
+    public double getTotalPrice(double amount) {
+        return getValue() * amount;
+    }
 }
