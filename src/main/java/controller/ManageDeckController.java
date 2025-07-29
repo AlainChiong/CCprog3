@@ -19,7 +19,6 @@ public class ManageDeckController {
     private final MainView mainView;
     private final MainController mainController;
     private final ManageDecksView manageDecksView;
-    private final ArrayList<DeckModel> deckList;
 
     public ManageDeckController(MainModel mainModel, MainView mainView, MainController mainController) {
         this.mainModel = mainModel;
