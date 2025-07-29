@@ -301,6 +301,7 @@ public class ManageCollectionController {
                     refreshCardDisplay();
                     System.out.println("ManageCollectionController: Card Removed.");
                 }
+                refreshCardDisplay();
             }
             else {
                 System.out.println("ManageCollectionController: Sell Card Cancelled.");
