@@ -2,7 +2,6 @@ package main.java.controller;
 
 import javax.swing.JOptionPane;
 
-import java.awt.Label;
 import java.awt.event.ActionEvent; 
 import java.awt.event.ActionListener;
 
@@ -20,34 +19,42 @@ import main.java.view.collection_views.ModifyCardAmountView;
 import main.java.view.collection_views.SellCardView; 
 
 /**
- * ManageCollectionController is a sub-controller responsible for managing all interactions
+ * `ManageCollectionController` is a sub-controller responsible for managing all interactions
  * and logic related to the "Manage Collection" screen.
- * It mediates between the ManageCollectionView and the relevant
- * parts of the MainModel, specifically the user's card Collection.
+ * It mediates between the {@link ManageCollectionView} and the relevant
+ * parts of the {@link MainModel}, specifically the user's card {@link main.java.model.classes.CollectionModel}.
+ * This controller handles user input from the view, updates the model, and ensures the view
+ * reflects the current state of the card collection.
  */
 public class ManageCollectionController {
 
-    /*
-     * Reference to the MainModel
+    /**
+     * Reference to the main application model, which holds the card collection data.
      */
     private final MainModel mainModel;
-    /*
-     * Reference to the MainView
+    /**
+     * Reference to the main application view (JFrame), used for displaying sub-views.
      */
     private final MainView mainView;
-    /*
-     * Reference to the MainController
+    /**
+     * Reference to the main application controller, used for general application
+     * flow and state changes (e.g., updating user money).
      */
     private final MainController mainController;
-    /*
-     * Reference to the ManageCollectionView, the view that this controller is responsible of.
+    /**
+     * Reference to the {@link ManageCollectionView}, the specific view that this controller is responsible for.
      */
-    private final ManageCollectionView manageCollectionView; 
+    private final ManageCollectionView manageCollectionView;
 
     /**
-     * Constructor for ManageCollectionController.
+     * Constructs a new `ManageCollectionController`.
+     * Initializes the controller with references to the main model, main view, and main controller.
+     * It also obtains the specific `ManageCollectionView` instance from the `MainView`
+     * and sets up all necessary action listeners for its buttons.
+     *
      * @param mainModel The main application model.
      * @param mainView The main application view (JFrame).
+     * @param mainController The main application controller.
      */
     public ManageCollectionController(MainModel mainModel, MainView mainView ,MainController mainController) {
         this.mainModel = mainModel;
@@ -59,8 +66,9 @@ public class ManageCollectionController {
     }
 
     /**
-     * Sets up ActionListeners for buttons specifically on the ManageCollectionView.
-     * This method is internal to ManageCollectionController as it's responsible for its view's interactions.
+     * Sets up `ActionListener`s for all interactive buttons on the {@link ManageCollectionView}.
+     * This method is internal to `ManageCollectionController` as it's solely responsible
+     * for handling its view's interactions and delegating to appropriate action methods.
      */
     private void setupListeners() {
         // Listener for the "Add New Card" button
@@ -100,9 +108,11 @@ public class ManageCollectionController {
     }
 
     /**
-     * Refreshes the display of cards in the ManageCollectionView.
-     * This method is called by the MainController when the "Manage Collection" screen is shown,
-     * and also by this controller after any operation that changes the collection data (add, modify).
+     * Refreshes the display of cards in the {@link ManageCollectionView}.
+     * This method is called by the {@link MainController} when the "Manage Collection" screen is shown,
+     * and also by this controller after any operation that changes the collection data (e.g., add, modify, sell).
+     * It fetches the latest card data from the model, updates the view, and
+     * enables/disables action buttons based on whether the collection is empty.
      */
     public void refreshCardDisplay() {
 
@@ -125,7 +135,10 @@ public class ManageCollectionController {
 
     /**
      * Handles the action when the "Add New Card" button is pressed.
-     * Prompts the user for card details and adds the card to the collection.
+     * This method prompts the user for new card details using an {@link AddCardView} dialog.
+     * It validates the input, creates a new {@link CardModel}, and attempts to add it to the
+     * user's collection via the {@link MainModel}. It provides feedback to the user
+     * and refreshes the card display.
      */
     private void addCardButtonPressed() {
         System.out.println("ManageCollectionController: 'Add Card' action received.");
@@ -180,7 +193,11 @@ public class ManageCollectionController {
 
     /**
      * Handles the action when the "Modify Card Amount" button is pressed.
-     * Prompts the user for an amount change for the selected card.
+     * This method first checks if a card is selected in the view. If so, it displays
+     * a {@link ModifyCardAmountView} dialog to allow the user to change the amount
+     * of the selected card. It updates the card's amount in the model and, if the amount
+     * drops to zero or less, removes the card entirely from the collection.
+     * The card display is then refreshed.
      */
     private void modifyCardCountButtonPressed() {
         System.out.println("ManageCollectionController: 'Modify Card Count' action received.");
@@ -217,7 +234,9 @@ public class ManageCollectionController {
 
     /**
      * Handles the action when the "View Card Details" button is pressed.
-     * Displays a dialog with detailed information about the selected card.
+     * This method first checks if a card is selected in the view. If so, it formats
+     * the detailed information of the selected card (name, rarity, variant, value, amount)
+     * into a string and displays it in an informational dialog to the user.
      */
     private void viewCardDetailsButtonPressed() {
         System.out.println("ManageCollectionController: 'View Card Details' action received.");
@@ -245,6 +264,14 @@ public class ManageCollectionController {
         }
     }
 
+    /**
+     * Handles the action when the "Sell Card" button is pressed.
+     * This method first checks if a card is selected in the view. If so, it displays
+     * a {@link SellCardView} dialog to allow the user to specify how many units of the
+     * selected card they wish to sell. It validates the sell amount, updates the user's
+     * money in the {@link MainModel}, reduces the card's amount, and removes the card
+     * entirely from the collection if its amount drops to zero. The card display is then refreshed.
+     */
     private void sellCardButtonPressed() {
         System.out.println("ManageCollectionController: 'Sell Card' action received.");
 
@@ -270,6 +297,7 @@ public class ManageCollectionController {
                 selectedCard.setAmount(selectedCard.getAmount() - sellCardView.getNewValue());
                 if (selectedCard.getAmount() == 0) {
                     mainModel.getCollectionModel().removeCard(selectedCard);
+                    JOptionPane.showMessageDialog(manageCollectionView, "Card removed from collection as amount reached 0.", "Card Removed", JOptionPane.INFORMATION_MESSAGE);
                     refreshCardDisplay();
                     System.out.println("ManageCollectionController: Card Removed.");
                 }

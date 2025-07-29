@@ -7,20 +7,24 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * The `Collection` class manages a collection of {@link CardModel} objects.
+ * The `CollectionModel` class manages a collection of {@link CardModel} objects.
  * It provides functionalities to add cards, display the collection,
- * modify card counts, view individual card details, and find specific cards.
- * {@link CardModel} are stored in an `ArrayList`.
+ * modify card counts, view individual card details, find specific cards,
+ * and remove cards.
+ * {@link CardModel} instances are stored internally in an `ArrayList`.
  */
 public class CollectionModel {
     /**
      * An `ArrayList` to store the {@link CardModel} objects in this collection.
+     * Each {@link CardModel} represents a unique card type (name, rarity, variant)
+     * and holds its current amount.
      */
     private List<CardModel> cards;
 
     /**
-     * Constructs a new, empty `Collection` of cards.
-     * Initializes the internal `ArrayList` to store cards.
+     * Constructs a new, empty `CollectionModel` of cards.
+     * Initializes the internal `ArrayList` to store cards, ensuring the collection
+     * starts with no cards.
      */
     public CollectionModel() {
         cards = new ArrayList<>();
@@ -28,9 +32,10 @@ public class CollectionModel {
 
     /**
      * Returns the total number of unique card types currently in the collection.
-     * This represents the number of distinct `Card` objects, not the sum of their amounts.
+     * This represents the number of distinct {@link CardModel} objects stored,
+     * not the sum of the amounts of all cards.
      *
-     * @return The number of distinct cards in the collection.
+     * @return The number of distinct card types in the collection.
      */
     public int getCardCount() {
         return cards.size();
@@ -38,10 +43,15 @@ public class CollectionModel {
 
     /**
      * Adds a new {@link CardModel} to the collection.
-     * If a card with the same name, rarity, and variant already exists in the collection,
-     * its amount is incremented by one. Otherwise, the new card is added as a distinct entry.
+     * If a card with the same name, rarity, and variant already exists in the collection
+     * (as determined by the `matches` method of {@link CardModel}),
+     * its amount is incremented by one. Otherwise, the new card is added as a distinct entry
+     * with an initial amount of one (assuming the `nCard` passed in has an amount of 1,
+     * or its amount is set to 1 upon creation if it's a truly new card).
      *
      * @param nCard The {@link CardModel} object to be added to the collection.
+     * @return `true` if the card was added as a new distinct entry, `false` if an
+     * existing card's amount was incremented.
      */
     public boolean addCard(CardModel nCard) {
         for (CardModel card : cards) {
@@ -57,9 +67,9 @@ public class CollectionModel {
 
     /**
      * Displays all cards currently in the collection to the console.
-     * {@link CardModel} are sorted alphabetically by name before being displayed.
+     * {@link CardModel} instances are sorted alphabetically by name before being displayed.
      * If the collection is empty, a corresponding message is printed.
-     * The output format is "CardName xAmount".
+     * The output format for each card is "CardName xAmount".
      */
     public void displayCollection() {
         if (cards.isEmpty()) {
@@ -75,14 +85,17 @@ public class CollectionModel {
     }
 
     /**
-     * Allows the user to modify the amount of a specific card within the collection.
-     * The method prompts the user to choose a card from a numbered list and then
-     * to enter an amount by which to increase or decrease its quantity.
+     * Allows the user to modify the amount of a specific card within the collection
+     * via console input. The method prompts the user to choose a card from a numbered list
+     * and then to enter an amount by which to increase or decrease its quantity.
      * The card's amount cannot be set to a negative value; if a decrease would result
      * in a negative amount, it is set to 0.
      *
      * @param scanner The `Scanner` object used to read user input from the console.
+     * @deprecated This method is primarily for console-based interaction and
+     * is superseded by GUI-driven modification methods in the controller.
      */
+    @Deprecated
     public void modifyCardCount(Scanner scanner) {
         if (cards.isEmpty()) {
             System.out.println("No cards to modify.");
@@ -115,12 +128,15 @@ public class CollectionModel {
     }
 
     /**
-     * Displays the detailed properties of a specific card found by its name.
-     * If multiple cards have the same name but different rarities/variants, this method
-     * will display details of the first one found.
+     * Displays the detailed properties of a specific card found by its name to the console.
+     * It iterates through the collection and displays details of the first card found
+     * that matches the given name (case-insensitive).
      *
      * @param name The name of the card whose details are to be viewed. Case-insensitive.
+     * @deprecated This method is primarily for console-based interaction and
+     * is superseded by GUI-driven detail display methods in the controller.
      */
+    @Deprecated
     public void viewCardDetails(String name) {
         for (CardModel card : cards) {
             if (card.getName().equalsIgnoreCase(name)) {
@@ -137,15 +153,14 @@ public class CollectionModel {
     }
 
 
-   /**
+    /**
      * Retrieves a list of all cards in the collection, sorted alphabetically by name.
-     * The internal order of the collection remains unchanged.
+     * The internal order of the collection (`cards` field) remains unchanged.
      *
-     * @return A new, sorted List containing all CardModel objects.
+     * @return A new, sorted `List` containing all {@link CardModel} objects from the collection.
      */
     public List<CardModel> getCardsSortedByName() {
         List<CardModel> sortedCards = new ArrayList<>(cards); // Create a new, mutable copy
-
 
         Collections.sort(sortedCards, new Comparator<CardModel>() {
             @Override
@@ -154,10 +169,10 @@ public class CollectionModel {
                 return card1.getName().compareToIgnoreCase(card2.getName());
             }
         });
-        // --------------------------------------------------------
 
         return sortedCards;
     }
+
     /**
      * Returns the internal `ArrayList` of {@link CardModel} objects managed by this collection.
      * This provides direct access to the underlying list of cards.
@@ -173,9 +188,9 @@ public class CollectionModel {
      * It iterates through the collection's cards and returns the first card that matches
      * the provided name (case-insensitive).
      *
-     * @param collection The `Collection` object to search within.
+     * @param collection The `CollectionModel` object to search within.
      * @param name       The name of the card to find.
-     * @return The `Card` object if found, otherwise `null`.
+     * @return The {@link CardModel} object if found, otherwise `null`.
      */
     public static CardModel findCardInCollection(CollectionModel collection, String name) {
         for (CardModel c : collection.getCards()) {
@@ -187,12 +202,15 @@ public class CollectionModel {
     }
 
     /**
-     * Reduces the amount of a specific card in the collection by one.
+     * Reduces the amount of a specific card in the collection by one, identified by its name.
      * If the card's amount becomes 0 or less after reduction, the card is removed entirely from the collection.
      * A message is printed to the console indicating the outcome (amount reduced or card removed).
      *
      * @param name The name of the card to be removed or have its amount reduced. Case-insensitive.
-     */    
+     * @deprecated This method is primarily for console-based interaction and
+     * is superseded by GUI-driven removal methods in the controller.
+     */
+    @Deprecated
     public void removeCardByName(String name) {
         for (int i = 0; i < cards.size(); i++) {
             CardModel card = cards.get(i);
@@ -205,12 +223,16 @@ public class CollectionModel {
                     card.setAmount(newAmount);
                     System.out.println("Card amount reduced by 1.");
                 }
+                return; // Exit after finding and processing the first match
             }
         }
     }
 
-    /*
-     * Removes a card entirely from the collection
+    /**
+     * Removes a specific {@link CardModel} instance entirely from the collection.
+     * This method directly removes the object reference from the internal list.
+     *
+     * @param cardModel The {@link CardModel} object to be removed from the collection.
      */
     public void removeCard(CardModel cardModel) {
         cards.remove(cardModel);
