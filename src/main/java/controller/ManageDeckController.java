@@ -99,10 +99,23 @@ public class ManageDeckController {
         );
 
         if (confirm == JOptionPane.YES_OPTION) {
-            mainModel.getDecks().remove(selected);
-            JOptionPane.showMessageDialog(manageDecksView, "Deck deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
-            refreshDeckDisplay();
+        // Return all cards back to collection
+        CollectionModel collection = mainModel.getCollectionModel();
+        for (CardModel deckCard : selected.getCards()) {
+            CardModel existing = CollectionModel.findCardInCollection(collection, deckCard.getName());
+            if (existing != null && existing.matches(deckCard)) {
+                existing.setAmount(existing.getAmount() + 1);
+            } else {
+                CardModel copy = new CardModel(deckCard.getName(), deckCard.getRarity(), deckCard.getVariant(), deckCard.getBaseValue());
+                copy.setAmount(1);
+                collection.addCard(copy);
+            }
         }
+
+        mainModel.getDecks().remove(selected);
+        JOptionPane.showMessageDialog(manageDecksView, "Deck deleted and cards returned to collection.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        refreshDeckDisplay();
+    }
     }
     /*
      * TODO
@@ -155,17 +168,24 @@ public class ManageDeckController {
             return;
         }
 
-        // Let the user choose add or remove mode
         String[] options = {"Add Card", "Remove Card"};
         int action = JOptionPane.showOptionDialog(manageDecksView, "Would you like to add or remove a card?",
                 "Modify Deck", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
-        if (action == -1) return;  // User canceled
+        if (action == -1) return;
 
-        // Build list of card names to show
-        List<CardModel> candidateCards = (action == 0) ? allCards : selectedDeck.getCards();
+        List<CardModel> candidateCards;
+
+        if (action == 0) { // Add mode
+            candidateCards = allCards.stream()
+                .filter(card -> card.getAmount() > 0 && !selectedDeck.getCards().contains(card))
+                .toList();
+        } else { // Remove mode
+            candidateCards = new ArrayList<>(selectedDeck.getCards());
+        }
+
         if (candidateCards.isEmpty()) {
-            String msg = (action == 0) ? "No cards available to add." : "This deck has no cards to remove.";
+            String msg = (action == 0) ? "No cards with available copies to add." : "This deck has no cards to remove.";
             JOptionPane.showMessageDialog(manageDecksView, msg, "No Cards", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
@@ -178,20 +198,27 @@ public class ManageDeckController {
                 "Choose a card to " + (action == 0 ? "add" : "remove") + ":",
                 "Select Card", JOptionPane.PLAIN_MESSAGE, null, cardNames, cardNames[0]);
 
-        if (selected == null) return;  // Cancelled
+        if (selected == null) return;
 
-        // Find the card by matching name, rarity, variant
         CardModel chosenCard = candidateCards.get(java.util.Arrays.asList(cardNames).indexOf(selected));
 
         if (action == 0) { // Add
-            if (selectedDeck.getCards().contains(chosenCard)) {
-                JOptionPane.showMessageDialog(manageDecksView, "This card is already in the deck.", "Duplicate Card", JOptionPane.WARNING_MESSAGE);
-            } else {
-                selectedDeck.getCards().add(chosenCard);
-                JOptionPane.showMessageDialog(manageDecksView, "Card added to deck.", "Success", JOptionPane.INFORMATION_MESSAGE);
-            }
+            selectedDeck.getCards().add(chosenCard);
+            chosenCard.setAmount(chosenCard.getAmount() - 1);
+            JOptionPane.showMessageDialog(manageDecksView, "Card added to deck.", "Success", JOptionPane.INFORMATION_MESSAGE);
         } else { // Remove
             selectedDeck.getCards().remove(chosenCard);
+
+            CardModel existingInCollection = CollectionModel.findCardInCollection(collection, chosenCard.getName());
+            if (existingInCollection != null && existingInCollection.matches(chosenCard)) {
+                existingInCollection.setAmount(existingInCollection.getAmount() + 1);
+            } else {
+                // Card no longer in collection; add it back with amount 1
+                CardModel copy = new CardModel(chosenCard.getName(), chosenCard.getRarity(), chosenCard.getVariant(), chosenCard.getBaseValue());
+                copy.setAmount(1);
+                collection.addCard(copy);
+            }
+
             JOptionPane.showMessageDialog(manageDecksView, "Card removed from deck.", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
 
