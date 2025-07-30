@@ -23,7 +23,6 @@ public class ManageDeckController {
     private final ManageDecksView manageDecksView;
 
     public ManageDeckController(MainModel mainModel, MainView mainView, MainController mainController) {
-        System.out.println("ManageDeckController: Wah");
         this.mainModel = mainModel;
         this.mainView = mainView;
         this.mainController = mainController;

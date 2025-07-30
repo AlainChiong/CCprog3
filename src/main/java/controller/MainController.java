@@ -86,7 +86,20 @@ public class MainController {
         });
 
         mainView.getManageCollectionView().setBackButtonActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                backButtonPressed();
+            }
+        });
+        mainView.getManageDecksView().setBackButtonActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                backButtonPressed();
+            }
+        });
+        mainView.getManageBindersView().setBackButtonActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 backButtonPressed();
             }
         });
