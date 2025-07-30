@@ -1,5 +1,7 @@
 package main.java.model.classes;
 
+import main.java.model.enums.Rarity;
+
 public class PauperBinder extends BinderModel{
     
     public PauperBinder(String name){
@@ -15,5 +17,10 @@ public class PauperBinder extends BinderModel{
             return false;
         }
         return super.addCardB(card);
+    }
+
+    @Override
+    public boolean isCardAllowed(CardModel card) {
+        return card.getRarity() == Rarity.COMMON || card.getRarity() == Rarity.UNCOMMON;
     }
 }

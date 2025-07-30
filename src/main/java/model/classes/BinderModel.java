@@ -256,6 +256,10 @@ public class BinderModel {
         return cards.stream().mapToDouble(card -> card.getTotalPrice()).sum();
     }
 
+    public boolean isCardAllowed(CardModel card) {
+        return true;
+    }
+
 
     /**
      * Provides a static menu-driven interface for managing a list of `Binder` objects.
