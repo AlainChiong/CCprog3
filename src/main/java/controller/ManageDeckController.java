@@ -70,19 +70,14 @@ public class ManageDeckController {
 
         if (result == JOptionPane.OK_OPTION) {
             String name = createDeckView.getDeckName();
-            String type = createDeckView.getDeckType();
 
-            if (name.isEmpty() || type == null) {
+            if (name.isEmpty()) {
                 JOptionPane.showMessageDialog(manageDecksView, "Deck name and type are required.", "Input Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            DeckModel newDeck;
-            if (type.equalsIgnoreCase("sell")) {
-                newDeck = new SellableDeckModel(name);
-            } else {
-                newDeck = new DeckModel(name);
-            }
+            DeckModel newDeck = createDeckView.getDeckType();
+
             mainModel.getDecks().add(newDeck);
 
             JOptionPane.showMessageDialog(manageDecksView, "Deck created successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);

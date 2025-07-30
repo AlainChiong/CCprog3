@@ -22,14 +22,6 @@ public class DeckModel {
      * Each card in the deck is considered a unique instance (only one copy per card name).
      */
     protected ArrayList<CardModel> cards;
-   /**
-     * The name of the deck.
-     */
-    protected String typeName;
-   /**
-     * The name of the deck.
-     */
-    protected String type;
 
     /**
      * Constructs a new `Deck` with a specified name and initializes an empty list of cards.
@@ -39,8 +31,6 @@ public class DeckModel {
     public DeckModel(String name) {
         this.name = name;
         this.cards = new ArrayList<>();
-        this.typeName = "Normal Deck";
-        this.type = "normal";
     }
 
     /**
@@ -53,11 +43,11 @@ public class DeckModel {
     }
 
     public String getTypeName() {
-        return this.typeName;
+        return "Normal Deck";
     }
 
     public String getType() {
-        return this.type;
+        return "normal";
     }   
 
     /**
@@ -124,7 +114,7 @@ public class DeckModel {
             System.out.println("Deck is empty.");
             return;
         }
-        System.out.println("=== " + name + "'s "+ typeName +"===");
+        System.out.println("=== " + name + "'s "+ getTypeName() +"===");
         // Sort cards by name before displaying
         Collections.sort(cards, Comparator.comparing(CardModel::getName));
         for (CardModel card : cards) {

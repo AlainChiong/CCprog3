@@ -12,8 +12,6 @@ public class SellableDeckModel extends DeckModel {
      */
     public SellableDeckModel(String name){
         super(name);
-        this.typeName = "Sellable Deck";
-        this.type = "sell";
     }
     /*
      * 
@@ -41,4 +39,13 @@ public class SellableDeckModel extends DeckModel {
     public boolean isSellable() {
         return true;
     }
+
+    @Override
+    public String getTypeName() {
+        return "Sellable Deck";
+    }
+    @Override
+    public String getType() {
+        return "sellable";
+    }   
 }

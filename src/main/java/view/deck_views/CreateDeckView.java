@@ -3,6 +3,8 @@ package main.java.view.deck_views;
 import javax.swing.*;
 import java.awt.*;
 
+import main.java.model.classes.DeckModel;
+import main.java.model.classes.SellableDeckModel;
 import main.java.utilities.ViewUtilities;
 
 /**
@@ -74,8 +76,14 @@ public class CreateDeckView extends JPanel {
     /**
      * @return the selected deck type as a string: "Normal" or "Sellable".
      */
-    public String getDeckType() {
-        return (String) deckTypeComboBox.getSelectedItem();
+    public DeckModel getDeckType() {
+        String type = (String) deckTypeComboBox.getSelectedItem();
+        if (type == "Sellable") {
+            return new SellableDeckModel(getDeckName());
+        }
+        else {
+            return new DeckModel(getDeckName());
+        }
     }
 
     /**
