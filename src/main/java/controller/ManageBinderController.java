@@ -83,8 +83,34 @@ public class ManageBinderController {
 	}
 
 	private void deleteBinderButtonPressed() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'deleteDeckButtonPressed'");
+		BinderModel selectedBinder = manageBindersView.getSelectedBinder();
+
+        if (selectedBinder == null) {
+            JOptionPane.showMessageDialog(manageBindersView, "Please select a binder to delete.", "No Binder Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(
+            manageBindersView,
+            "Are you sure you want to delete the binder \"" + selectedBinder.getName() + "\"?\n" +
+            "All cards will be returned to your collection.",
+            "Confirm Deletion",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        // Move all cards back to the collection
+        selectedBinder.getCards().forEach(card -> mainModel.getCollectionModel().addCard(card));
+
+        // Remove binder from model
+        mainModel.getBinders().remove(selectedBinder);
+
+        // Show confirmation
+        JOptionPane.showMessageDialog(manageBindersView, "Binder deleted and cards returned to collection.", "Binder Deleted", JOptionPane.INFORMATION_MESSAGE);
+
+        // Refresh the view
+        refreshBinderDisplay();
 	}
 
 	private void createBinderButtonPressed() {
