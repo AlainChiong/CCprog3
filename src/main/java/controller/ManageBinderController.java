@@ -35,6 +35,8 @@ public class ManageBinderController {
         this.mainController = mainController;
 
         manageBindersView = mainView.getManageBindersView();
+
+        setupListeners();
     }
 
     private void setupListeners() {
