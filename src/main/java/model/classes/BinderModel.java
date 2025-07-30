@@ -248,6 +248,14 @@ public class BinderModel {
         System.out.printf("All cards sold from binder \"%s\". Total value: $%.2f%n", this.getName(), bValue);
     }
 
+    public boolean isSellable() {
+        return "sell".equalsIgnoreCase(this.type);
+    }
+
+    public double getTotalValue() {
+        return cards.stream().mapToDouble(card -> card.getTotalPrice()).sum();
+    }
+
 
     /**
      * Provides a static menu-driven interface for managing a list of `Binder` objects.

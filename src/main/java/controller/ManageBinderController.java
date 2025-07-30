@@ -8,6 +8,7 @@ import main.java.model.classes.CollectorBinder;
 import main.java.model.classes.LuxuryBinder;
 import main.java.model.classes.PauperBinder;
 import main.java.model.classes.RaresBinder;
+import main.java.view.BinderView;
 import main.java.view.MainView;
 import main.java.view.binder_views.ManageBindersView;
 
@@ -43,6 +44,20 @@ public class ManageBinderController {
         manageBindersView.setAddRemoveCardButtonActionListener(e -> addRemoveCardToBinderButtonPressed());
         manageBindersView.setTradeCardButtonActionListener(e -> tradeCardButtonPressed());
         manageBindersView.setSellBinderButtonActionListener(e -> sellBinderButtonPressed());
+    }
+
+    private void refreshBinderDisplay() {
+        manageBindersView.displayBinders(mainModel.getBinders(), e -> {
+            BinderView clickedView = (BinderView) e.getSource();
+
+            for (BinderController controller : manageBindersView.getBinderControllers()) {
+                boolean isSelected = controller.getBinderView() == clickedView;
+                controller.setSelected(isSelected);
+                if (isSelected) {
+                    manageBindersView.setSelectedBinder(controller.getBinderModel());
+                }
+            }
+        });
     }
 
 	private void sellBinderButtonPressed() {

@@ -12,7 +12,14 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import java.util.List;
+import java.util.ArrayList;
 
+import javax.swing.JScrollPane;
+
+import main.java.model.classes.BinderModel;
+import main.java.controller.BinderController;
+import main.java.view.BinderView;
 import main.java.utilities.ViewUtilities;
     /*
      * 
@@ -26,7 +33,13 @@ public class ManageBindersView extends JPanel {
     private JButton viewBinderButton;
     private JButton sellBinderButton;
     private JButton backButton;
+
+    private JPanel bindersContainerPanel;
+    private List<BinderController> binderControllers;
+    private BinderModel currentSelectedBinderModel = null;
+
     public ManageBindersView() {
+        this.binderControllers = new ArrayList<>();
         setLayout(new BorderLayout(10, 10));
         setBackground(new Color(50, 50, 80));
         layoutComponents();
@@ -41,50 +54,110 @@ public class ManageBindersView extends JPanel {
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setBackground(new Color(50, 50, 80));
 
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
 
         createBinderButton = new JButton("Create New Binder");
         ViewUtilities.styleActionButton(createBinderButton);
-        buttonPanel.add(createBinderButton, gridBagConstraints);
+        buttonPanel.add(createBinderButton, gbc);
 
-        gridBagConstraints.gridy++;
+        gbc.gridy++;
         deleteBinderButton = new JButton("Delete Binder");
         ViewUtilities.styleActionButton(deleteBinderButton);
-        buttonPanel.add(deleteBinderButton, gridBagConstraints);
+        buttonPanel.add(deleteBinderButton, gbc);
 
-        gridBagConstraints.gridy++;
+        gbc.gridy++;
         addRemoveCardButton = new JButton("Add/Remove Cards");
         ViewUtilities.styleActionButton(addRemoveCardButton);
-        buttonPanel.add(addRemoveCardButton, gridBagConstraints);
+        buttonPanel.add(addRemoveCardButton, gbc);
 
-        gridBagConstraints.gridy++;
-        addRemoveCardButton = new JButton("Trade Card");
-        ViewUtilities.styleActionButton(addRemoveCardButton);
-        buttonPanel.add(addRemoveCardButton, gridBagConstraints);
+        gbc.gridy++;
+        tradeCardButton = new JButton("Trade Card");
+        ViewUtilities.styleActionButton(tradeCardButton);
+        buttonPanel.add(tradeCardButton, gbc);
 
-        gridBagConstraints.gridy++;
+        gbc.gridy++;
         viewBinderButton = new JButton("View Binder");
         ViewUtilities.styleActionButton(viewBinderButton);
-        buttonPanel.add(viewBinderButton, gridBagConstraints);
+        buttonPanel.add(viewBinderButton, gbc);
 
-        gridBagConstraints.gridy++;
+        gbc.gridy++;
         sellBinderButton = new JButton("Sell Binder");
         ViewUtilities.styleActionButton(sellBinderButton);
-        sellBinderButton.setEnabled(false); // Only enable when a sellable deck is selected
-        buttonPanel.add(sellBinderButton, gridBagConstraints);
+        sellBinderButton.setEnabled(false);
+        buttonPanel.add(sellBinderButton, gbc);
 
-        gridBagConstraints.gridy++;
-        gridBagConstraints.insets = new Insets(30, 10, 10, 10);
+        gbc.gridy++;
+        gbc.insets = new Insets(30, 10, 10, 10);
         backButton = new JButton("Back to Main Menu");
         ViewUtilities.styleBackButton(backButton);
-        buttonPanel.add(backButton, gridBagConstraints);
+        buttonPanel.add(backButton, gbc);
 
         add(buttonPanel, BorderLayout.EAST);
+
+        bindersContainerPanel = new JPanel();
+        bindersContainerPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 15));
+        bindersContainerPanel.setBackground(new Color(50, 50, 80));
+
+        JScrollPane scrollPane = new JScrollPane(bindersContainerPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setBackground(new Color(50, 50, 80));
+        scrollPane.getViewport().setBackground(new Color(50, 50, 80));
+
+        add(scrollPane, BorderLayout.CENTER);
+    }
+
+    public void displayBinders(List<BinderModel> binders, ActionListener binderSelectionListener) {
+        bindersContainerPanel.removeAll();
+        binderControllers.clear();
+        currentSelectedBinderModel = null;
+
+        if (binders != null && !binders.isEmpty()) {
+            for (BinderModel binder : binders) {
+                BinderView binderView = new BinderView(binder);
+                BinderController controller = new BinderController(binder, binderView, binderSelectionListener);
+                binderControllers.add(controller);
+                bindersContainerPanel.add(binderView);
+            }
+        } else {
+            JLabel noBindersLabel = new JLabel("No binders in your collection.");
+            noBindersLabel.setForeground(Color.LIGHT_GRAY);
+            noBindersLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+            bindersContainerPanel.add(noBindersLabel);
+        }
+
+        bindersContainerPanel.revalidate();
+        bindersContainerPanel.repaint();
+    }
+
+    public void setEnableActionButtons(boolean enabled) {
+        deleteBinderButton.setEnabled(enabled);
+        addRemoveCardButton.setEnabled(enabled);
+        tradeCardButton.setEnabled(enabled);
+        viewBinderButton.setEnabled(enabled);
+        sellBinderButton.setEnabled(enabled);
+    }
+
+    public void setSelectedBinder(BinderModel selectedBinder) {
+        this.currentSelectedBinderModel = selectedBinder;
+        for (BinderController controller : binderControllers) {
+            controller.setSelected(controller.getBinderModel().equals(selectedBinder));
+        }
+        sellBinderButton.setEnabled(selectedBinder != null && selectedBinder.isSellable());
+    }
+
+    public BinderModel getSelectedBinder() {
+        return currentSelectedBinderModel;
+    }
+
+    public List<BinderController> getBinderControllers() {
+        return binderControllers;
     }
 
     public void setCreateBinderButtonActionListener(ActionListener listener) {
