@@ -2,13 +2,13 @@ package main.java.controller;
 
 import javax.swing.JOptionPane;
 
-import java.awt.event.ActionEvent; 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.util.List; 
+import java.util.List;
 
-import main.java.model.MainModel; 
-import main.java.model.classes.CardModel; 
+import main.java.model.MainModel;
+import main.java.model.classes.CardModel;
 import main.java.model.enums.Rarity;
 import main.java.model.enums.Variant;
 
@@ -16,7 +16,7 @@ import main.java.view.MainView;
 import main.java.view.collection_views.AddCardView;
 import main.java.view.collection_views.ManageCollectionView;
 import main.java.view.collection_views.ModifyCardAmountView;
-import main.java.view.collection_views.SellCardView; 
+import main.java.view.collection_views.SellCardView;
 
 /**
  * `ManageCollectionController` is a sub-controller responsible for managing all interactions
@@ -33,12 +33,12 @@ public class ManageCollectionController {
      */
     private final MainModel mainModel;
     /**
-     * Reference to the main application view (JFrame), used for displaying sub-views.
+     * Reference to the main application view (JFrame), used for displaying sub-views and dialogs.
      */
     private final MainView mainView;
     /**
      * Reference to the main application controller, used for general application
-     * flow and state changes (e.g., updating user money).
+     * flow and state changes (e.g., updating user money or navigating back to main menu).
      */
     private final MainController mainController;
     /**
@@ -95,7 +95,7 @@ public class ManageCollectionController {
             }
         });
 
-        //Listener for the "Sell Card" button
+        // Listener for the "Sell Card" button
         manageCollectionView.setSellCardButtonActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -103,8 +103,8 @@ public class ManageCollectionController {
             }
         });
 
-        // The "Back to Main Menu" button listener is handled directly in MainView's constructor,
-        // which calls MainController.showMainMenu(). This keeps navigation centralized at MainController.
+        // The "Back to Main Menu" button listener is handled in MainController,
+        // ensuring centralized navigation control.
     }
 
     /**
@@ -115,18 +115,17 @@ public class ManageCollectionController {
      * enables/disables action buttons based on whether the collection is empty.
      */
     public void refreshCardDisplay() {
-
         List<CardModel> currentCards = mainModel.getCollectionModel().getCardsSortedByName();
 
         manageCollectionView.displayCards(currentCards, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                // When a card view is clicked, its CardModel is passed as the source
                 CardModel clickedCard = (CardModel) e.getSource();
- 
-                manageCollectionView.setSelectedCard(clickedCard);
+                manageCollectionView.setSelectedCard(clickedCard); // Update the selected card in the view
             }
         });
+        // Enable/disable action buttons based on whether there are cards in the collection
         boolean isCollectionEmpty = currentCards.isEmpty();
         manageCollectionView.setEnableActionButtons(!isCollectionEmpty);
     }
@@ -143,11 +142,11 @@ public class ManageCollectionController {
     private void addCardButtonPressed() {
         System.out.println("ManageCollectionController: 'Add Card' action received.");
 
-        AddCardView addCardView = new AddCardView();
+        AddCardView addCardView = new AddCardView(); // Create the dialog view
 
         int result = JOptionPane.showConfirmDialog(
-            manageCollectionView, 
-            addCardView,         
+            manageCollectionView,
+            addCardView,
             "Add New Card",
             JOptionPane.OK_CANCEL_OPTION,
             JOptionPane.PLAIN_MESSAGE
@@ -159,7 +158,8 @@ public class ManageCollectionController {
             Variant variant = addCardView.getVariantSelection();
             String valueStr = addCardView.getValueText();
 
-            if (name.isEmpty() || valueStr.isEmpty()) {
+            // Input validation
+            if (name.trim().isEmpty() || valueStr.trim().isEmpty()) {
                 JOptionPane.showMessageDialog(manageCollectionView, "Card Name and Base Value are required.", "Input Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -176,16 +176,16 @@ public class ManageCollectionController {
                 return;
             }
 
-            CardModel newCard = new CardModel(name, rarity, variant, value);
-
-            boolean newEntry = mainModel.getCollectionModel().addCard(newCard);
+            // Create new card model and attempt to add to collection
+            CardModel newCard = new CardModel(name.trim(), rarity, variant, value);
+            boolean newEntry = mainModel.getCollectionModel().addCard(newCard); // addCard updates amount if card exists
 
             if (newEntry) {
                 JOptionPane.showMessageDialog(manageCollectionView, "New card added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(manageCollectionView, "Existing card amount updated!", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
-            refreshCardDisplay();
+            refreshCardDisplay(); // Update the view to show changes
         } else {
             System.out.println("ManageCollectionController: Add Card operation cancelled.");
         }
@@ -201,12 +201,11 @@ public class ManageCollectionController {
      */
     private void modifyCardCountButtonPressed() {
         System.out.println("ManageCollectionController: 'Modify Card Count' action received.");
-        // Get the currently selected CardModel from the ManageCollectionView
-        CardModel selectedCard = manageCollectionView.getSelectedCard();
+        CardModel selectedCard = manageCollectionView.getSelectedCard(); // Get the currently selected CardModel
+
         if (selectedCard == null) {
             JOptionPane.showMessageDialog(manageCollectionView, "Please select a card to modify amount.", "No Card Selected", JOptionPane.WARNING_MESSAGE);
-        }
-        else {
+        } else {
             ModifyCardAmountView modifyCardAmountView = new ModifyCardAmountView(selectedCard.getAmount());
 
             int result = JOptionPane.showConfirmDialog(
@@ -219,15 +218,17 @@ public class ManageCollectionController {
 
             if (result == JOptionPane.OK_OPTION) {
                 System.out.println("ManageCollectionController: Card count value modified");
-                selectedCard.setAmount( selectedCard.getAmount() + modifyCardAmountView.getNewValue());
+                // Update the amount of the selected card
+                selectedCard.setAmount(selectedCard.getAmount() + modifyCardAmountView.getNewValue());
+
+                // If amount drops to 0 or less, remove the card from the collection
                 if (selectedCard.getAmount() <= 0) {
                     mainModel.getCollectionModel().removeCard(selectedCard);
-                    JOptionPane.showMessageDialog(manageCollectionView, "Card removed from collection as amount reached 0.", "Card Removed", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(manageCollectionView, "Card removed from collection as amount reached 0 or less.", "Card Removed", JOptionPane.INFORMATION_MESSAGE);
                 }
-                refreshCardDisplay();
-            }
-            else {
-                System.out.println("ManageCollectionController: Modify card count cancelled");
+                refreshCardDisplay(); // Update the view to reflect changes
+            } else {
+                System.out.println("ManageCollectionController: Modify card count cancelled.");
             }
         }
     }
@@ -240,13 +241,12 @@ public class ManageCollectionController {
      */
     private void viewCardDetailsButtonPressed() {
         System.out.println("ManageCollectionController: 'View Card Details' action received.");
-        // Get the currently selected CardModel from the ManageCollectionView
-        CardModel selectedCard = manageCollectionView.getSelectedCard();
+        CardModel selectedCard = manageCollectionView.getSelectedCard(); // Get the currently selected CardModel
+
         if (selectedCard == null) {
             JOptionPane.showMessageDialog(manageCollectionView, "Please select a card to view details.", "No Card Selected", JOptionPane.WARNING_MESSAGE);
-        }
-        else {
-            // Format the card details for display
+        } else {
+            // Format the card details for display in a user-friendly way
             String details = String.format(
                 "=== Card Details ===\n" +
                 "Name    : %s\n" +
@@ -279,9 +279,7 @@ public class ManageCollectionController {
 
         if (selectedCard == null) {
             JOptionPane.showMessageDialog(manageCollectionView, "Please select a card to sell.", "No Card Selected", JOptionPane.WARNING_MESSAGE);
-        }
-        else {
-
+        } else {
             SellCardView sellCardView = new SellCardView(selectedCard);
 
             int result = JOptionPane.showConfirmDialog(
@@ -293,18 +291,32 @@ public class ManageCollectionController {
             );
 
             if (result == JOptionPane.OK_OPTION) {
-                mainController.setMoney(mainModel.getMoney() + selectedCard.getTotalPrice(sellCardView.getNewValue()));
-                selectedCard.setAmount(selectedCard.getAmount() - sellCardView.getNewValue());
+                double amountToSell = sellCardView.getNewValue(); // This is the amount the user wants to sell
+                double currentAmount = selectedCard.getAmount();
+
+                // Basic validation for sell amount
+                if (amountToSell <= 0 || amountToSell > currentAmount) {
+                     JOptionPane.showMessageDialog(manageCollectionView,
+                        "Invalid sell amount. Must be positive and not exceed current amount.",
+                        "Sell Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Update player money
+                mainController.setMoney(mainModel.getMoney() + selectedCard.getTotalPrice((int) amountToSell)); // Cast to int if getTotalPrice expects int
+
+                // Reduce card amount
+                selectedCard.setAmount(currentAmount - amountToSell);
+
+                // Remove card if amount drops to zero
                 if (selectedCard.getAmount() == 0) {
                     mainModel.getCollectionModel().removeCard(selectedCard);
                     JOptionPane.showMessageDialog(manageCollectionView, "Card removed from collection as amount reached 0.", "Card Removed", JOptionPane.INFORMATION_MESSAGE);
-                    refreshCardDisplay();
-                    System.out.println("ManageCollectionController: Card Removed.");
+                    System.out.println("ManageCollectionController: Card Removed (amount reached 0).");
                 }
-                refreshCardDisplay();
-            }
-            else {
-                System.out.println("ManageCollectionController: Sell Card Cancelled.");
+                refreshCardDisplay(); // Update the view to reflect changes
+            } else {
+                System.out.println("ManageCollectionController: Sell Card operation cancelled.");
             }
         }
     }

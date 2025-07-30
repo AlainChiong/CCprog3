@@ -42,10 +42,22 @@ public class DeckModel {
         return name;
     }
 
+    /**
+     * Returns the human-readable type name of this deck.
+     * For the base `DeckModel`, this is "Normal Deck". Subclasses may override this.
+     *
+     * @return A string representing the type name of the deck.
+     */
     public String getTypeName() {
         return "Normal Deck";
     }
 
+    /**
+     * Returns a string identifier for the type of this deck, typically used for internal logic.
+     * For the base `DeckModel`, this is "normal". Subclasses may override this.
+     *
+     * @return A string representing the type identifier of the deck.
+     */
     public String getType() {
         return "normal";
     }   

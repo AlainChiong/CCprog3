@@ -57,9 +57,6 @@ public class ViewUtilities {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
-    
-
-
 
     public static void styleTextField(JTextField textField) {
 

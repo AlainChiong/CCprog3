@@ -15,13 +15,42 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The `ManageDeckController` is a sub-controller responsible for handling all user interactions
+ * and business logic pertaining to the "Manage Decks" screen of the application.
+ * It acts as an intermediary between the {@link ManageDecksView} and the deck-related data
+ * within the {@link MainModel}. This includes operations such as creating, deleting, viewing,
+ * adding/removing cards from, and selling decks.
+ */
 public class ManageDeckController {
-    
+    /**
+     * Reference to the main application model, providing access to all application data, including decks and the card collection.
+     */
     private final MainModel mainModel;
+    /**
+     * Reference to the main application view, used for displaying sub-views, dialogs, and managing panel transitions.
+     */
     private final MainView mainView;
+    /**
+     * Reference to the main application controller, used for delegating global application state changes,
+     * such as updating the player's money or navigating between main application panels.
+     */
     private final MainController mainController;
+    /**
+     * Reference to the specific view managed by this controller, the {@link ManageDecksView}.
+     */
     private final ManageDecksView manageDecksView;
 
+    /**
+     * Constructs a new `ManageDeckController`.
+     * Initializes the controller with necessary references to the core application components.
+     * It also obtains the specific {@link ManageDecksView} instance from the {@link MainView}
+     * and proceeds to set up all action listeners for the interactive elements within that view.
+     *
+     * @param mainModel The main application model.
+     * @param mainView The main application view.
+     * @param mainController The main application controller.
+     */
     public ManageDeckController(MainModel mainModel, MainView mainView, MainController mainController) {
         this.mainModel = mainModel;
         this.mainView = mainView;
@@ -31,6 +60,11 @@ public class ManageDeckController {
         setupListeners();
     }
     
+    /**
+     * Configures and assigns action listeners to the buttons and interactive elements
+     * on the {@link ManageDecksView}. These listeners trigger the corresponding
+     * action methods within this controller.
+     */
     private void setupListeners() {
         System.out.println("ManageDeckController: Setup Listeners");
         manageDecksView.setCreateDeckButtonActionListener(e -> createDeckButtonPressed());
@@ -40,6 +74,13 @@ public class ManageDeckController {
         manageDecksView.setSellDeckButtonActionListener(e -> sellDeckButtonPressed());
     }
 
+    /**
+     * Refreshes the display of decks in the {@link ManageDecksView}.
+     * This method retrieves the current list of decks from the {@link MainModel},
+     * updates the view to reflect these decks, and sets up a selection listener
+     * for individual deck views. It also dynamically enables or disables action buttons
+     * based on whether there are any decks to manage.
+     */
     public void refreshDeckDisplay() {
         List<DeckModel> currentDecks = mainModel.getDecks();
 
@@ -55,6 +96,12 @@ public class ManageDeckController {
         manageDecksView.setEnableActionButtons(!isEmpty);
     }
 
+    /**
+     * Handles the action when the "Create Deck" button is pressed.
+     * It opens a dialog for the user to input a new deck's name and type.
+     * Upon successful creation and validation, the new deck is added to the model
+     * and the deck display is refreshed.
+     */
     private void createDeckButtonPressed() {
         System.out.println("ManageDeckController: Create Deck Button Action Recieved");
         CreateDeckView createDeckView = new CreateDeckView();
@@ -84,6 +131,12 @@ public class ManageDeckController {
         }
     }
 
+    /**
+     * Handles the action when the "Delete Deck" button is pressed.
+     * It prompts the user to select a deck and confirms the deletion.
+     * If confirmed, all cards from the deleted deck are meticulously returned to the main collection,
+     * the deck is removed from the model, and the display is refreshed.
+     */
     private void deleteDeckButtonPressed() {
         DeckModel selected = manageDecksView.getSelectedDeck();
         if (selected == null) {
@@ -117,10 +170,12 @@ public class ManageDeckController {
         refreshDeckDisplay();
     }
     }
-    /*
-     * TODO
-     */
 
+    /**
+     * Handles the action when the "View Deck" button is pressed.
+     * It displays a dialog showing the name and all cards within the currently
+     * selected deck, along with the deck's total combined card value.
+     */
     private void viewDeckButtonPressed() {
         DeckModel selected = manageDecksView.getSelectedDeck();
         if (selected == null) {
@@ -149,10 +204,13 @@ public class ManageDeckController {
 
         JOptionPane.showMessageDialog(manageDecksView, deckContents.toString(), "View Deck", JOptionPane.INFORMATION_MESSAGE);
     }
-    /*
-     * TODO
-     */
 
+    /**
+     * Handles the action when the "Add/Remove Card to Deck" button is pressed.
+     * It provides an option for the user to either add a card from their main collection to the
+     * selected deck, or remove a card from the selected deck and return it to the collection.
+     * This method carefully manages the quantities of cards in both the deck and the main collection.
+     */
     private void addRemoveCardToDeckButtonPressed() {
         DeckModel selectedDeck = manageDecksView.getSelectedDeck();
         if (selectedDeck == null) {
@@ -224,10 +282,14 @@ public class ManageDeckController {
 
         refreshDeckDisplay();
     }
-    /*
-     * TODO
-     */
 
+    /**
+     * Handles the action when the "Sell Deck" button is pressed.
+     * This method strictly allows only decks that are instances of {@link SellableDeckModel} to be sold.
+     * If a sellable deck is selected and the user confirms the action, the deck's total monetary value
+     * is added to the player's balance. The cards within the sold deck are considered permanently lost
+     * (i.e., they are NOT returned to the main collection). The deck itself is then removed from the application.
+     */
     private void sellDeckButtonPressed() {
         DeckModel selected = manageDecksView.getSelectedDeck();
         if (selected == null) {
@@ -252,10 +314,17 @@ public class ManageDeckController {
         double totalValue = 0.0;
         CollectionModel collection = mainModel.getCollectionModel();
 
+
+        // Calculate the total value of all cards contained within the deck.
+        // The cards are permanently consumed by selling the deck.
+        // Their handling in the main collection (reduction of amount or removal) is assumed
+        // to have occurred when they were initially moved into the deck.
         for (CardModel cardInDeck : selected.getCards()) {
             totalValue += cardInDeck.getBaseValue();
 
-            // Check if it exists in collection
+            // This block processes how cards in the sold deck affect the main collection.
+            // If a card from the collection was moved into this deck, and it was the last copy,
+            // this ensures it's fully removed from the collection's records if it still exists there with amount 0.
             CardModel inCollection = collection.getMatchingCard(cardInDeck);
             if (inCollection != null) {
                 if (inCollection.getAmount() == 0) {

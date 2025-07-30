@@ -238,12 +238,15 @@ public class CollectionModel {
         cards.remove(cardModel);
     }
 
+
     /**
-     * Finds and returns the card in the collection that matches the given card
-     * (based on name, rarity, and variant).
+     * Finds and returns the card in the collection that matches the given target card
+     * based on its name, rarity, and variant, as determined by the {@link CardModel#matches(CardModel)} method.
+     * This is useful for retrieving the exact {@link CardModel} object that represents
+     * a specific card type within the collection, regardless of its amount.
      *
-     * @param target The card to match against.
-     * @return The matching card from the collection, or null if not found.
+     * @param target The {@link CardModel} object to match against existing cards in the collection.
+     * @return The matching {@link CardModel} object from the collection, or `null` if no matching card is found.
      */
     public CardModel getMatchingCard(CardModel target) {
         for (CardModel card : cards) {
