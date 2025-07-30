@@ -235,7 +235,7 @@ public class ManageDeckController {
             return;
         }
 
-        if (!"sell".equalsIgnoreCase(selected.getType())) {
+        if (!"sellable".equalsIgnoreCase(selected.getType())) {
             JOptionPane.showMessageDialog(manageDecksView, "Only sellable decks can be sold.", "Invalid Deck Type", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -256,7 +256,7 @@ public class ManageDeckController {
             totalValue += cardInDeck.getBaseValue();
 
             // Check if it exists in collection
-            CardModel inCollection = collection.getExactCard(cardInDeck);
+            CardModel inCollection = collection.getMatchingCard(cardInDeck);
             if (inCollection != null) {
                 if (inCollection.getAmount() == 0) {
                     collection.removeCard(inCollection);

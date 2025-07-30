@@ -237,4 +237,20 @@ public class CollectionModel {
     public void removeCard(CardModel cardModel) {
         cards.remove(cardModel);
     }
+
+    /**
+     * Finds and returns the card in the collection that matches the given card
+     * (based on name, rarity, and variant).
+     *
+     * @param target The card to match against.
+     * @return The matching card from the collection, or null if not found.
+     */
+    public CardModel getMatchingCard(CardModel target) {
+        for (CardModel card : cards) {
+            if (card.matches(target)) {
+                return card;
+            }
+        }
+        return null;
+    }
 }
