@@ -23,11 +23,11 @@ public class MainController {
      */
     private ManageCollectionController manageCollectionController;
     /*
-     * The subcontroller that manages the collection
+     * The subcontroller that manages the binders
      */
     private ManageBinderController manageBinderController;
     /*
-     * The subcontroller that manages the collection
+     * The subcontroller that manages the decks
      */
     private ManageDeckController manageDeckController;
 
@@ -38,11 +38,11 @@ public class MainController {
         this.mainView = new MainView("Trading Card Inventory System");
         this.mainModel = new MainModel();
 
-        this.manageCollectionController = new ManageCollectionController(
-                mainModel,
-                mainView,
-                this
-        );
+        this.manageCollectionController = new ManageCollectionController(mainModel, mainView, this);
+
+        this.manageDeckController = new ManageDeckController(mainModel, mainView, this);
+
+        this.manageBinderController = new ManageBinderController(mainModel, mainView, this);
 
         setupAllViewListeners();
 

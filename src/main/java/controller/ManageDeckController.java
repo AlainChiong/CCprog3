@@ -23,6 +23,7 @@ public class ManageDeckController {
     private final ManageDecksView manageDecksView;
 
     public ManageDeckController(MainModel mainModel, MainView mainView, MainController mainController) {
+        System.out.println("ManageDeckController: Wah");
         this.mainModel = mainModel;
         this.mainView = mainView;
         this.mainController = mainController;
@@ -32,6 +33,7 @@ public class ManageDeckController {
     }
     
     private void setupListeners() {
+        System.out.println("ManageDeckController: Setup Listeners");
         manageDecksView.setCreateDeckButtonActionListener(e -> createDeckButtonPressed());
         manageDecksView.setDeleteDeckButtonActionListener(e -> deleteDeckButtonPressed());
         manageDecksView.setViewDeckButtonActionListener(e -> viewDeckButtonPressed());
@@ -55,6 +57,7 @@ public class ManageDeckController {
     }
 
     private void createDeckButtonPressed() {
+        System.out.println("ManageDeckController: Create Deck Button Action Recieved");
         CreateDeckView createDeckView = new CreateDeckView();
 
         int result = JOptionPane.showConfirmDialog(
@@ -106,5 +109,26 @@ public class ManageDeckController {
             JOptionPane.showMessageDialog(manageDecksView, "Deck deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
             refreshDeckDisplay();
         }
+    }
+    /*
+     * TODO
+     */
+
+    private void viewDeckButtonPressed() {
+
+    }
+    /*
+     * TODO
+     */
+
+    private void addRemoveCardToDeckButtonPressed() {
+
+    }
+    /*
+     * TODO
+     */
+
+    private void sellDeckButtonPressed() {
+
     }
 }
