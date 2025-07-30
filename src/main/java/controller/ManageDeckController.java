@@ -203,6 +203,11 @@ public class ManageDeckController {
         CardModel chosenCard = candidateCards.get(java.util.Arrays.asList(cardNames).indexOf(selected));
 
         if (action == 0) { // Add
+            if (selectedDeck.getCards().size() >= 10) {
+                JOptionPane.showMessageDialog(manageDecksView, "Deck is already full (max 10 cards).", "Deck Full", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             selectedDeck.getCards().add(chosenCard);
             chosenCard.setAmount(chosenCard.getAmount() - 1);
             JOptionPane.showMessageDialog(manageDecksView, "Card added to deck.", "Success", JOptionPane.INFORMATION_MESSAGE);
