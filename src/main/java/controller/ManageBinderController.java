@@ -20,33 +20,41 @@ import main.java.view.MainView;
 import main.java.view.binder_views.ManageBindersView;
 import main.java.view.collection_views.AddCardView;
 
+/**
+ * Controller responsible for managing binders and their interactions
+ * within the application, such as creating, deleting, trading, and modifying binders.
+ */
 public class ManageBinderController {
-    /**
-     * Reference to the main application model, which holds the card collection data.
-     */
+
+    /** Reference to the main model that holds application data. */
     private final MainModel mainModel;
-    /**
-     * Reference to the main application view (JFrame), used for displaying sub-views.
-     */
+
+    /** Reference to the main application view. */
     private final MainView mainView;
-    /**
-     * Reference to the main application controller, used for general application
-     * flow and state changes (e.g., updating user money).
-     */
+
+    /** Reference to the main application controller. */
     private final MainController mainController;
 
+    /** The view used for managing binders. */
     private final ManageBindersView manageBindersView;
 
+    /**
+     * Constructs a ManageBinderController to manage binder operations.
+     *
+     * @param mainModel The application model.
+     * @param mainView The main view of the application.
+     * @param mainController The central controller for application state.
+     */
     public ManageBinderController(MainModel mainModel, MainView mainView, MainController mainController) {
         this.mainModel = mainModel;
         this.mainView = mainView;
         this.mainController = mainController;
 
         manageBindersView = mainView.getManageBindersView();
-
         setupListeners();
     }
 
+    /** Sets up all the listeners for UI actions related to binders. */
     private void setupListeners() {
         manageBindersView.setCreateBinderButtonActionListener(e -> createBinderButtonPressed());
         manageBindersView.setDeleteBinderButtonActionListener(e -> deleteBinderButtonPressed());
@@ -56,6 +64,7 @@ public class ManageBinderController {
         manageBindersView.setSellBinderButtonActionListener(e -> sellBinderButtonPressed());
     }
 
+    /** Refreshes the display of binders and updates selection state. */
     private void refreshBinderDisplay() {
         manageBindersView.displayBinders(mainModel.getBinders(), e -> {
             BinderView clickedView = (BinderView) e.getSource();
@@ -69,7 +78,7 @@ public class ManageBinderController {
             }
         });
     }
-
+    /** Handles the action when the user chooses to sell a binder. */
 	private void sellBinderButtonPressed() {
 		BinderModel selected = manageBindersView.getSelectedBinder();
         if (selected == null) {
@@ -125,7 +134,7 @@ public class ManageBinderController {
 
         refreshBinderDisplay();
 	}
-
+    /** Handles trading a card from a binder with a new card. */
 	private void tradeCardButtonPressed() {
 		BinderModel selectedBinder = manageBindersView.getSelectedBinder();
         if (selectedBinder == null) {
@@ -238,7 +247,7 @@ public class ManageBinderController {
         JOptionPane.showMessageDialog(manageBindersView, "Card traded successfully!", "Trade Complete", JOptionPane.INFORMATION_MESSAGE);
         refreshBinderDisplay();
 	}
-
+    /** Handles adding or removing a card from the selected binder. */
 	private void addRemoveCardToBinderButtonPressed() {
 		BinderModel selectedBinder = manageBindersView.getSelectedBinder();
         if (selectedBinder == null) {
@@ -320,7 +329,7 @@ public class ManageBinderController {
 
         refreshBinderDisplay();
 	}
-
+    /** Displays the contents of the selected binder in a dialog. */
 	private void viewBinderButtonPressed() {
 		BinderModel selected = manageBindersView.getSelectedBinder();
         if (selected == null) {
@@ -353,7 +362,7 @@ public class ManageBinderController {
 
         JOptionPane.showMessageDialog(manageBindersView, binderContents.toString(), "View Binder", JOptionPane.INFORMATION_MESSAGE);
 	}
-
+    /** Handles deleting the selected binder and returning its cards to the collection. */
 	private void deleteBinderButtonPressed() {
 		BinderModel selectedBinder = manageBindersView.getSelectedBinder();
 
@@ -384,7 +393,7 @@ public class ManageBinderController {
         // Refresh the view
         refreshBinderDisplay();
 	}
-
+    /** Creates a new binder based on user input. */
 	private void createBinderButtonPressed() {
 		String[] binderTypes = {
             "Non-curated Binder",
