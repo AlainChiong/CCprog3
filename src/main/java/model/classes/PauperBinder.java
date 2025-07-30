@@ -23,4 +23,14 @@ public class PauperBinder extends BinderModel{
     public boolean isCardAllowed(CardModel card) {
         return card.getRarity() == Rarity.COMMON || card.getRarity() == Rarity.UNCOMMON;
     }
+
+    @Override
+    public boolean isTradeable() {
+        return false;
+    }
+
+    @Override
+    public double getSellMultiplier() {
+        return 1.0;
+    }
 }

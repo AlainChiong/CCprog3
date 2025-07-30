@@ -1,5 +1,8 @@
 package main.java.model.classes;
 
+import main.java.model.enums.Rarity;
+import main.java.model.enums.Variant;
+
 public class CollectorBinder extends BinderModel{
     
     public CollectorBinder(String name){
@@ -16,5 +19,16 @@ public class CollectorBinder extends BinderModel{
             return false;
         }
         return super.addCardB(card);
+    }
+
+    @Override
+    public boolean isCardAllowed(CardModel card) {
+        return (card.getRarity() == Rarity.RARE || card.getRarity() == Rarity.LEGENDARY)
+            && card.getVariant() != Variant.NORMAL;
+    }
+
+    @Override
+    public boolean isTradeable() {
+        return true;
     }
 }

@@ -260,6 +260,14 @@ public class BinderModel {
         return true;
     }
 
+    public boolean isTradeable() {
+        return true; // default: not tradeable
+    }
+
+    public double getSellMultiplier() {
+        return 1.0; // Default multiplier for most binders
+    }
+
 
     /**
      * Provides a static menu-driven interface for managing a list of `Binder` objects.

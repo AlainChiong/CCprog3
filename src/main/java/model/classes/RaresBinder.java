@@ -21,6 +21,16 @@ public class RaresBinder extends BinderModel{
 
     @Override
     public boolean isCardAllowed(CardModel card) {
-        return card.getRarity() == Rarity.RARE || card.getRarity() == Rarity.MYTHIC;
+        return card.getRarity() == Rarity.RARE || card.getRarity() == Rarity.LEGENDARY;
+    }
+
+    @Override
+    public boolean isTradeable() {
+        return false;
+    }
+
+    @Override
+    public double getSellMultiplier() {
+        return 1.1;
     }
 }

@@ -71,8 +71,59 @@ public class ManageBinderController {
     }
 
 	private void sellBinderButtonPressed() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'sellDeckButtonPressed'");
+		BinderModel selected = manageBindersView.getSelectedBinder();
+        if (selected == null) {
+            JOptionPane.showMessageDialog(manageBindersView, "Please select a binder to sell.", "No Binder Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (!selected.isSellable()) {
+            JOptionPane.showMessageDialog(manageBindersView, "This binder type cannot be sold.", "Not Sellable", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(
+            manageBindersView,
+            "Are you sure you want to sell this binder?\nAll cards in it will be lost permanently.",
+            "Confirm Sell",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        double totalValue = 0.0;
+        CollectionModel collection = mainModel.getCollectionModel();
+
+        for (CardModel cardInBinder : selected.getCards()) {
+            totalValue += cardInBinder.getBaseValue();
+
+            // Check if this card still exists in collection with amount == 0
+            CardModel inCollection = collection.getMatchingCard(cardInBinder);
+            if (inCollection != null && inCollection.getAmount() == 0) {
+                collection.removeCard(inCollection);
+            }
+        }
+
+        // Apply binder's custom sell multiplier
+        totalValue *= selected.getSellMultiplier();
+
+        // Update user balance
+        double currentMoney = mainModel.getMoney();
+        mainModel.setMoney(currentMoney + totalValue);
+        mainController.setMoney(mainModel.getMoney());
+
+        // Remove binder and its cards
+        selected.getCards().clear();
+        mainModel.getBinders().remove(selected);
+
+        JOptionPane.showMessageDialog(
+            manageBindersView,
+            "Binder sold for $" + String.format("%.2f", totalValue),
+            "Binder Sold",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+
+        refreshBinderDisplay();
 	}
 
 	private void tradeCardButtonPressed() {
