@@ -229,6 +229,58 @@ public class ManageDeckController {
      */
 
     private void sellDeckButtonPressed() {
+        DeckModel selected = manageDecksView.getSelectedDeck();
+        if (selected == null) {
+            JOptionPane.showMessageDialog(manageDecksView, "Please select a deck to sell.", "No Deck Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
+        if (!"sell".equalsIgnoreCase(selected.getType())) {
+            JOptionPane.showMessageDialog(manageDecksView, "Only sellable decks can be sold.", "Invalid Deck Type", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(
+            manageDecksView,
+            "Are you sure you want to sell this deck?\nAll cards in it will be lost permanently.",
+            "Confirm Sell",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        double totalValue = 0.0;
+        CollectionModel collection = mainModel.getCollectionModel();
+
+        for (CardModel cardInDeck : selected.getCards()) {
+            totalValue += cardInDeck.getBaseValue();
+
+            // Check if it exists in collection
+            CardModel inCollection = collection.getExactCard(cardInDeck);
+            if (inCollection != null) {
+                if (inCollection.getAmount() == 0) {
+                    collection.removeCard(inCollection);
+                }
+                // If amount > 0, do nothing — card is still owned outside the deck
+            }
+        }
+
+        // Add money
+        double currentMoney = mainModel.getMoney();
+        mainModel.setMoney(currentMoney + totalValue);
+        mainController.setMoney(mainModel.getMoney());
+
+        // Remove deck
+        selected.getCards().clear();
+        mainModel.getDecks().remove(selected);
+
+        JOptionPane.showMessageDialog(
+            manageDecksView,
+            "Deck sold for $" + String.format("%.2f", totalValue),
+            "Deck Sold",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+
+        refreshDeckDisplay();
     }
 }
