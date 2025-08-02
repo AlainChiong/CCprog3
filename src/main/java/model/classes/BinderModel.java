@@ -99,16 +99,13 @@ public class BinderModel {
             return false;
         }
         for (CardModel c : cards) {
-            if (c.matches(card)) { 
-                int availableSpace = 20 - total;
-                if (availableSpace <= 0) {
-                    System.out.println("Cannot add more cards. Binder is full.");
-                    return false;
+            if (c.matches(card)) {
+                if (total + 1 <= 20) {
+                    c.setAmount(c.getAmount() + 1);
+                    System.out.println(card.getName() + " amount increased in binder.");
+                    return true;
                 }
-
-                c.setAmount(c.getAmount() + 1);
-                System.out.println(card.getName() + " amount increased in binder.");
-                return true;
+                // ...else binder is full
             }
         }
         CardModel newCard = new CardModel(card.getName(), card.getRarity(), card.getVariant(), card.getValue());

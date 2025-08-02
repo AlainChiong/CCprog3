@@ -303,7 +303,7 @@ public class ManageBinderController {
                 return;
             }
 
-            if (!selectedBinder.addCardB(chosenCard)) {
+            if (!selectedBinder.isCardAllowed(chosenCard)) {
                 JOptionPane.showMessageDialog(manageBindersView, "This card does not meet the binder's restrictions.", "Invalid Card", JOptionPane.WARNING_MESSAGE);
                 return;
             }

@@ -21,6 +21,8 @@ import main.java.model.classes.BinderModel;
 import main.java.controller.BinderController;
 import main.java.view.BinderView;
 import main.java.utilities.ViewUtilities;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
     /*
      * 
      */
@@ -121,7 +123,18 @@ public class ManageBindersView extends JPanel {
         if (binders != null && !binders.isEmpty()) {
             for (BinderModel binder : binders) {
                 BinderView binderView = new BinderView(binder);
-                BinderController controller = new BinderController(binder, binderView, binderSelectionListener);
+                // Create the controller and pass a wrapper ActionListener
+            ActionListener wrappedListener = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Send a new ActionEvent where the source is the BinderView
+                    binderSelectionListener.actionPerformed(
+                        new ActionEvent(binderView, ActionEvent.ACTION_PERFORMED, binder.getName())
+                    );
+                }
+            };
+
+            BinderController controller = new BinderController(binder, binderView, wrappedListener);
                 binderControllers.add(controller);
                 bindersContainerPanel.add(binderView);
             }
