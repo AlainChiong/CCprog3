@@ -345,7 +345,7 @@ public class ManageBinderController {
         } else {
             for (CardModel card : selected.getCards()) {
                 double amount = card.getAmount(); // how many copies of this card
-                double value = card.getBaseValue();
+                double value = card.getValue();
                 double subtotal = value * amount;
                 totalValue += subtotal;
 
