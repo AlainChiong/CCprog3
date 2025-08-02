@@ -97,7 +97,7 @@ public class ManageDecksView extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(decksContainerPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setBackground(new Color(50, 50, 80));
         scrollPane.getViewport().setBackground(new Color(50, 50, 80));
