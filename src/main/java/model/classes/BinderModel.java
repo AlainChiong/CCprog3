@@ -108,7 +108,7 @@ public class BinderModel {
                 // ...else binder is full
             }
         }
-        CardModel newCard = new CardModel(card.getName(), card.getRarity(), card.getVariant(), card.getValue());
+        CardModel newCard = new CardModel(card.getName(), card.getRarity(), card.getVariant(), card.getBaseValue());
         newCard.setAmount(1);
         cards.add(newCard);
         System.out.println(newCard.getName() + " added to binder.");
