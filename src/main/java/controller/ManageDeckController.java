@@ -325,7 +325,7 @@ public class ManageDeckController {
         // Their handling in the main collection (reduction of amount or removal) is assumed
         // to have occurred when they were initially moved into the deck.
         for (CardModel cardInDeck : selected.getCards()) {
-            totalValue += cardInDeck.getBaseValue();
+            totalValue += cardInDeck.getValue();
 
             // This block processes how cards in the sold deck affect the main collection.
             // If a card from the collection was moved into this deck, and it was the last copy,

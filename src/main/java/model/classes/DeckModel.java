@@ -154,7 +154,7 @@ public class DeckModel {
     public double getTotalValue() {
         double total = 0.0;
         for (CardModel card : cards) {
-            total += card.getValue() * card.getAmount();
+            total += card.getValue();
         }
         return total;
     }
