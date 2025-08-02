@@ -104,7 +104,7 @@ public class ManageBinderController {
         CollectionModel collection = mainModel.getCollectionModel();
 
         for (CardModel cardInBinder : selected.getCards()) {
-            totalValue += cardInBinder.getBaseValue();
+            totalValue += cardInBinder.getValue();
 
             // Check if this card still exists in collection with amount == 0
             CardModel inCollection = collection.getMatchingCard(cardInBinder);
